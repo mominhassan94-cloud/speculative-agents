@@ -13,7 +13,7 @@ import time
 
 from dotenv import load_dotenv
 
-load_dotenv()
+load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env"))
 
 DEFAULT_MODEL = "gemini-3.5-flash-lite"
 RETRY_CODES = {429, 500, 503}   # 429 = free-tier rate limit; 500/503 = transient server errors
@@ -108,8 +108,12 @@ class LLMClient:
         parts = (content.parts or []) if content else []
         raw = {"finish_reason": str(r.candidates[0].finish_reason) if r.candidates else None,
                "parts": [_part_json(p) for p in parts]}
-        for p in parts:
+        for i, p in enumerate(parts):
             if p.function_call:
+                # Gemini may request several calls at once (parallel function calling). Our loop runs one
+                # tool per step, so keep the turn only up to the first call: history then holds exactly one
+                # call per tool result (as the Anthropic version did). raw still logs every requested call.
+                content = self.types.Content(role=content.role, parts=parts[:i + 1])
                 return content, {"tool": p.function_call.name, "args": dict(p.function_call.args or {})}, raw
         text = "".join(p.text for p in parts if p.text and not p.thought)
         return content, {"final": text}, raw

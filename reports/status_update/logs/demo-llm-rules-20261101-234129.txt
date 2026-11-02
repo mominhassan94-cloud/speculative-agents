@@ -1,0 +1,68 @@
+TASK: Find the nonstop flights from Houston (IAH) to Denver (DEN) on 2026-11-06 and compare their total cost including checked-bag fees. 
+
+=== BASELINE (no speculation) ===
+  [  2.8s] search_flights({"date": "2026-11-06", "dest": "DEN", "origin": "IAH"})
+  [  5.0s] get_fare_details({"flight_id": "UA482"})
+  [  7.2s] get_fare_details({"flight_id": "WN219"})
+  [  9.3s] get_fare_details({"flight_id": "F9133"})
+  answer: Here are the nonstop flights from Houston (IAH) to Denver (DEN) on November 6, 2026, along with a comparison of their base prices, checked-bag fees, and total costs:
+
+1. **Frontier (Flight F9133)**
+   * Base Price: $142
+   * Checked Bag Fee: $65
+   * **Total Cost:** **$207**
+
+2. **United (Flight UA482)**
+   * Base Price: $189
+   * Checked Bag Fee: $40
+   * **Total Cost:** **$229**
+
+3. **Southwest (Flight WN219)**
+   * Base Price: $204
+   * Checked Bag Fee: $0 (2 free checked bags)
+   * **Total Cost:** **$204**
+
+*(Note: American Airlines Flight AA907 was also listed in search results, but it is a connecting flight, not nonstop, priced at $231).*
+  total: 10.5s
+
+=== SPECULATIVE (rules speculator) ===
+  [  2.7s] search_flights({"origin": "IAH", "dest": "DEN", "date": "2026-11-06"})
+  [  4.2s] get_fare_details({"flight_id": "UA482"})
+  [  5.7s] get_fare_details({"flight_id": "WN219"})
+  [  7.2s] get_fare_details({"flight_id": "F9133"})
+  answer: Here are the nonstop flights from Houston (IAH) to Denver (DEN) on November 6, 2026, along with a comparison of their ticket prices, checked-bag fees, and total costs:
+
+1. **Frontier (Flight F9133)**
+   * **Ticket Price:** $142
+   * **Checked Bag Fee:** $65
+   * **Total Cost:** **$207**
+
+2. **United (Flight UA482)**
+   * **Ticket Price:** $189
+   * **Checked Bag Fee:** $40
+   * **Total Cost:** **$229**
+
+3. **Southwest (Flight WN219)**
+   * **Ticket Price:** $204
+   * **Checked Bag Fee:** $0 (First two checked bags fly free)
+   * **Total Cost:** **$204**
+
+*(Note: American Airlines also operates route options, but that flight is a connecting flight, not nonstop, priced at $231).*
+  total: 8.4s
+
+=== SPECULATION LOG ===
+  [  2.7s] launched guess get_fare_details(UA482) conf 0.80
+  [  4.2s] guessed get_fare_details(UA482): correct, saved 0.8 s
+  [  4.2s] launched guess get_fare_details(WN219) conf 0.70
+  [  5.7s] guessed get_fare_details(WN219): correct, saved 0.7 s
+  [  5.7s] launched guess get_fare_details(F9133) conf 0.70
+  [  7.2s] guessed get_fare_details(F9133): correct, saved 0.6 s
+  [  7.2s] no guess (speculator returned null)
+
+=== SUMMARY ===
+  {'speculative_calls': 3, 'hits': 3, 'misses': 0, 'wasted': 0, 'too_late': 0, 'est_seconds_saved': 2.03}
+  time: 10.5s -> 8.4s  (20% faster)
+  same tool-call sequence as baseline: True
+  same final answer as baseline: False
+  rate-limit retries: 0 (0.0s spent in backoff, included in times above)
+  log written to reports/status_update/logs/demo-rules-20261101-234149.json

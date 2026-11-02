@@ -1,0 +1,74 @@
+TASK: Find the nonstop flights from Houston (IAH) to Denver (DEN) on 2026-11-06 and compare their total cost including checked-bag fees. 
+
+=== BASELINE (no speculation) ===
+  [  2.7s] search_flights({"origin": "IAH", "date": "2026-11-06", "dest": "DEN"})
+  [  4.9s] get_fare_details({"flight_id": "UA482"})
+  [  7.0s] get_fare_details({"flight_id": "WN219"})
+  [  9.0s] get_fare_details({"flight_id": "F9133"})
+  answer: Here are the nonstop flights from Houston (IAH) to Denver (DEN) on November 6, 2026, along with a comparison of their ticket prices, checked-bag fees, and total costs:
+
+1. **Frontier (Flight F9133)**
+   * **Ticket Price:** $142
+   * **Checked-Bag Fee:** $65
+   * **Total Cost:** **$207**
+
+2. **United (Flight UA482)**
+   * **Ticket Price:** $189
+   * **Checked-Bag Fee:** $40
+   * **Total Cost:** **$229**
+
+3. **Southwest (Flight WN219)**
+   * **Ticket Price:** $204
+   * **Checked-Bag Fee:** $0 (2 free checked bags)
+   * **Total Cost:** **$204**
+
+*(Note: American Airlines Flight AA907 was also found, but it is a connecting flight, not nonstop, priced at $231).* 
+
+**Summary:** 
+* **Southwest** is the least expensive option overall when including a checked bag (**$204**).
+* **Frontier** has the lowest base ticket price, but with bag fees included, it comes out to **$207**.
+  total: 10.2s
+
+=== SPECULATIVE (llm speculator) ===
+  [  2.6s] search_flights({"date": "2026-11-06", "origin": "IAH", "dest": "DEN"})
+  [  4.9s] get_fare_details({"flight_id": "UA482"})
+  [  6.9s] get_fare_details({"flight_id": "WN219"})
+  [  8.9s] get_fare_details({"flight_id": "F9133"})
+  answer: Here are the nonstop flights from Houston (IAH) to Denver (DEN) on November 6, 2026, along with a comparison of their ticket prices, checked-bag fees, and total costs:
+
+1. **Frontier (Flight F9133)**
+   * **Ticket Price:** $142
+   * **Checked-Bag Fee:** $65
+   * **Total Cost (incl. 1 checked bag):** **$207**
+
+2. **United (Flight UA482)**
+   * **Ticket Price:** $189
+   * **Checked-Bag Fee:** $40
+   * **Total Cost (incl. 1 checked bag):** **$229**
+
+3. **Southwest (Flight WN219)**
+   * **Ticket Price:** $204
+   * **Checked-Bag Fee:** $0 *(2 free checked bags included)*
+   * **Total Cost (incl. 1 checked bag):** **$204**
+
+*(Note: American Airlines Flight AA907 was also listed, but it is a connecting flight, not a nonstop flight, with a ticket price of $231).* 
+
+**Summary:** 
+* **Lowest base fare:** Frontier ($142)
+* **Lowest total cost including a checked bag:** Southwest ($204, thanks to their free checked bag policy)
+  total: 10.2s
+
+=== SPECULATION LOG ===
+  [  3.7s] too late (agent already moved on): get_fare_details(UA482)
+  [  5.4s] launched guess get_fare_details(WN219) conf 0.90
+  [  6.9s] guessed get_fare_details(WN219): correct, saved 0.2 s
+  [  7.4s] too late (agent already moved on): get_fare_details(F9133)
+  [  9.6s] launched guess get_fare_details(AA907) conf 0.60
+
+=== SUMMARY ===
+  {'speculative_calls': 2, 'hits': 1, 'misses': 0, 'wasted': 1, 'too_late': 2, 'est_seconds_saved': 0.16}
+  time: 10.2s -> 10.2s  (1% faster)
+  same tool-call sequence as baseline: True
+  same final answer as baseline: False
+  rate-limit retries: 0 (0.0s spent in backoff, included in times above)
+  log written to reports/status_update/logs/demo-llm-20261101-234019.json
