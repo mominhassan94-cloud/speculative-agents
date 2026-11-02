@@ -2,10 +2,11 @@
 
 Two versions, so the project can compare a cheap LLM against simple rules:
   - RuleSpeculator: hand-written rules (free, instant)
-  - LLMSpeculator:  a small, cheap model (costs money, adds a little latency)
+  - LLMSpeculator:  a small, fast Gemini model (costs API calls, adds a little latency)
 """
 import json
 import re
+import time
 from dataclasses import dataclass
 
 
@@ -55,20 +56,21 @@ Reply with ONLY JSON, no other text:
 
 
 class LLMSpeculator:
+    """A small, fast Gemini model as the guesser (model from GEMINI_SPEC_MODEL or GEMINI_MODEL)."""
     name = "llm"
 
-    def __init__(self, tools, model="claude-haiku-5-5"):
-        import anthropic
-        self.client = anthropic.Anthropic()
-        self.model = model
+    def __init__(self, tools, model=None):
+        from llm_client import LLMClient, spec_model
+        self.llm = LLMClient(model or spec_model())
+        self.model = self.llm.model
         self.tool_desc = "\n".join(f"- {t.name}({', '.join(t.input_schema['properties'])}): {t.description}"
                                    for t in tools.values())
+        self.last_user = None
         self.last_raw = None
+        self.calls = []       # (user prompt, raw output, seconds) for every prediction, for logging
 
     def _complete(self, user):
-        r = self.client.messages.create(model=self.model, max_tokens=200, system=SPEC_PROMPT,
-                                        messages=[{"role": "user", "content": user}])
-        return r.content[0].text
+        return self.llm.complete(SPEC_PROMPT, user, max_tokens=300)
 
     def predict(self, task, history):
         if not history:
@@ -77,7 +79,9 @@ class LLMSpeculator:
                          for i, h in enumerate(history))
         user = f"TASK: {task}\n\nTOOLS:\n{self.tool_desc}\n\nCALLS SO FAR:\n{hist}\n\nPredict the next call."
         self.last_user = user
+        t = time.time()
         raw = self._complete(user)
+        self.calls.append({"input": user, "raw_output": raw, "spec_s": round(time.time() - t, 2)})
         self.last_raw = raw
         m = re.search(r"\{.*\}", raw, re.S)
         if not m:
@@ -89,25 +93,3 @@ class LLMSpeculator:
         if not d.get("tool"):
             return None
         return Guess(d["tool"], d.get("args", {}), float(d.get("confidence", 0)))
-
-
-class GeminiSpeculator(LLMSpeculator):
-    """Same guesser, but using a Gemini model. Needs GEMINI_API_KEY (or GOOGLE_API_KEY) set."""
-    name = "gemini"
-
-    def __init__(self, tools, model=None):
-        import os
-        from google import genai
-        self.genai = genai
-        self.client = genai.Client()  # reads GEMINI_API_KEY / GOOGLE_API_KEY from the environment
-        self.model = model or os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
-        self.tool_desc = "\n".join(f"- {t.name}({', '.join(t.input_schema['properties'])}): {t.description}"
-                                   for t in tools.values())
-        self.last_raw = None
-
-    def _complete(self, user):
-        from google.genai import types
-        r = self.client.models.generate_content(
-            model=self.model, contents=user,
-            config=types.GenerateContentConfig(system_instruction=SPEC_PROMPT, max_output_tokens=300))
-        return r.text

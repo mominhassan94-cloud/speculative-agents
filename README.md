@@ -53,26 +53,42 @@ User task
 | File | What it does |
 |---|---|
 | `mock_tools.py` | About 10 fake tools with simulated API latency, each marked read-only or side-effecting |
-| `agent.py` | The agent loop, with a real-model brain and an offline scripted brain |
-| `speculator.py` | The guessers: a rule-based one and an LLM-based one (Claude or Gemini) |
+| `llm_client.py` | Thin wrapper around the Gemini SDK: tool declarations, function-call parsing, 429 retry |
+| `agent.py` | The agent loop, with a real Gemini brain and an offline scripted brain |
+| `speculator.py` | The guessers: a rule-based one and an LLM-based one (Gemini) |
 | `runtime.py` | Runs guesses early, caches results, checks matches, logs hits and misses |
 | `demo.py` | Runs one task with and without speculation and compares timings |
 | `spec_demo.py` | Shows the speculator alone running on a real input with a real model |
 
 ## Quickstart
 
+The real-model paths use the Google Gemini API through the official Google Gen AI SDK (`google-genai`).
+
 ```bash
+python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 
 # Offline demo (no API key needed): scripted agent + rule-based guesser
 python demo.py
 
-# The speculator running on a real input with a real model
-export GEMINI_API_KEY=your_key_here      # or ANTHROPIC_API_KEY for Claude
-python spec_demo.py gemini               # or: python spec_demo.py
+# Real models: copy the env template and put your key in .env (gitignored)
+cp .env.example .env        # then edit GEMINI_API_KEY=... (and optionally GEMINI_MODEL)
+
+python spec_demo.py                         # the speculator alone on a real input
+python demo.py --llm                        # Gemini agent + Gemini speculator, baseline vs speculative
+python demo.py --llm --speculator rules     # Gemini agent + rule-based speculator
+python demo.py --llm --log-dir logs/        # also save raw model I/O and timings as JSON
 ```
 
-Never commit API keys. Keep them in environment variables or a `.env` file that is listed in `.gitignore`.
+| Variable | Meaning |
+|---|---|
+| `GEMINI_API_KEY` | Required for real-model runs |
+| `GEMINI_MODEL` | Model for the agent and the speculator (default `gemini-3.5-flash-lite`) |
+| `GEMINI_SPEC_MODEL` | Optional: a different model for the speculator only |
+
+All model calls go through `llm_client.py`. HTTP 429 (free-tier rate limit) and transient 5xx errors are retried with exponential backoff, and the time spent in backoff is reported by `demo.py`.
+
+Never commit API keys. Keep them in a `.env` file, which is listed in `.gitignore`.
 
 ## Evaluation plan
 
