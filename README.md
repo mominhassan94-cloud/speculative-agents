@@ -1,7 +1,7 @@
 # Speculative Tool Execution for LLM Agents
 
 **CSE 289: AI for Engineers · Team The Mockingducks**
-Khizar Juma · Momin Hassan
+Momin Hassan · Khizar Juma 
 
 > AI agents spend a lot of time waiting on tools. What if we guessed the next tool call, started it early, and kept the result only if the guess was right?
 
