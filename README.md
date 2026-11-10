@@ -58,6 +58,8 @@ User task
 | `speculator.py` | The guessers: a rule-based one and an LLM-based one (Claude or Gemini) |
 | `runtime.py` | Runs guesses early, caches results, checks matches, logs hits and misses |
 | `demo.py` | Runs one task with and without speculation and compares timings |
+| `tasks.py` | Evaluation tasks: prompt, scripted plan, and a correctness check for each |
+| `run_eval.py` | Runs every task with and without speculation, writes a CSV to `workspace/results/` and prints a summary |
 | `spec_demo.py` | Shows the speculator alone running on a real input with a real model |
 
 ## Quickstart
@@ -67,6 +69,9 @@ pip install -r requirements.txt
 
 # Offline demo (no API key needed): scripted agent + rule-based guesser
 python demo.py
+
+# Evaluation harness (offline, fast): all tasks x 3 reps x {baseline, rules, oracle}
+python run_eval.py --reps 3
 
 # The speculator running on a real input with a real model
 export GEMINI_API_KEY=your_key_here      # or ANTHROPIC_API_KEY for Claude
