@@ -36,6 +36,14 @@ class RuleSpeculator:
                 for f in search["result"].get("flights", []):
                     if f.get("nonstop") and f["flight_id"] not in seen:
                         return Guess("get_fare_details", {"flight_id": f["flight_id"]}, 0.7)
+                # all fares seen: if the task is about booking, guess the lowest-total nonstop gets booked
+                if "book" in task.lower():
+                    fares = {h["args"]["flight_id"]: h["result"].get("bag_fee_usd", 0)
+                             for h in history if h["tool"] == "get_fare_details"}
+                    nonstop = [f for f in search["result"].get("flights", []) if f.get("nonstop") and f["flight_id"] in fares]
+                    if nonstop:
+                        best = min(nonstop, key=lambda f: f["price"] + fares[f["flight_id"]])
+                        return Guess("book_flight", {"flight_id": best["flight_id"]}, 0.8)
         if last["tool"] == "search_web":
             results = last["result"].get("results", [])
             if results:
