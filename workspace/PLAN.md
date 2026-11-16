@@ -188,3 +188,27 @@ Done when: every H7-H10 result is reported as pass or fail, including failures.
 | Rules look great on held-out tasks | Then the held-out tasks are too similar; rewrite them with different orderings before drawing any conclusion |
 | One of us is unavailable for a few days | Daily updates and one-owner-per-file mean the other can continue; keep `learnings.md` current |
 | Numbers from papers are misquoted | Verify against the arXiv text before they go in a slide |
+
+---
+
+## 7. Other ways to approach this (summary)
+
+The plan above is shape **A, "the map"**. Full detail lives in [`DIRECTIONS.md`](DIRECTIONS.md); this is the short version.
+
+**Ways to cut agent time, beyond speculation:** parallel independent calls, plan-then-execute, macro tools, batched calls, model routing, streaming early dispatch, prompt caching, result caching, hedged requests. Speculation only wins on *dependent chains* where the next argument depends on a result the agent hasn't reasoned over yet.
+
+**Extra hypotheses (H11 to H24):** parallel vs speculation crossover, p95 vs mean gain, decay with chain depth, cost-aware gating, top-k speculation, online learning, first-call prediction, macro tools vs speculation, stale-hit growth with TTL, reversible-write speculation, and more.
+
+**Other project shapes:**
+
+| Shape | Question |
+|---|---|
+| A. The map (current) | When does speculation pay and when does it lose? |
+| B. Head-to-head | Speculation vs parallel vs macro tools vs plan-execute, same harness |
+| C. Cost-aware policy | Expected-value gate vs fixed threshold |
+| D. Attack surface | What can a poisoned observation make a speculator do? |
+| E. Speculative writes | Hold-then-commit for side-effecting tools |
+| F. Replay study | How predictable are next calls in real trajectories? |
+| G. Real tools | Do the mock conclusions hold with real APIs? |
+
+**Suggested default:** A + D. Decide for real after the sweeps (Nov 20), when real numbers show which direction is richest.
