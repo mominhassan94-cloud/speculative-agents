@@ -37,6 +37,14 @@ class RuleSpeculator:
                 for f in search["result"].get("flights", []):
                     if f.get("nonstop") and f["flight_id"] not in seen:
                         return Guess("get_fare_details", {"flight_id": f["flight_id"]}, 0.7)
+                # all fares seen: if the task is about booking, guess the lowest-total nonstop gets booked
+                if "book" in task.lower():
+                    fares = {h["args"]["flight_id"]: h["result"].get("bag_fee_usd", 0)
+                             for h in history if h["tool"] == "get_fare_details"}
+                    nonstop = [f for f in search["result"].get("flights", []) if f.get("nonstop") and f["flight_id"] in fares]
+                    if nonstop:
+                        best = min(nonstop, key=lambda f: f["price"] + fares[f["flight_id"]])
+                        return Guess("book_flight", {"flight_id": best["flight_id"]}, 0.8)
         if last["tool"] == "search_web":
             results = last["result"].get("results", [])
             if results:
@@ -79,9 +87,9 @@ class LLMSpeculator:
                          for i, h in enumerate(history))
         user = f"TASK: {task}\n\nTOOLS:\n{self.tool_desc}\n\nCALLS SO FAR:\n{hist}\n\nPredict the next call."
         self.last_user = user
-        t = time.time()
+        t = time.perf_counter()
         raw = self._complete(user)
-        self.calls.append({"input": user, "raw_output": raw, "spec_s": round(time.time() - t, 2)})
+        self.calls.append({"input": user, "raw_output": raw, "spec_s": round(time.perf_counter() - t, 2)})
         self.last_raw = raw
         m = re.search(r"\{.*\}", raw, re.S)
         if not m:

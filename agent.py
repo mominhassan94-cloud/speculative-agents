@@ -52,9 +52,9 @@ class GeminiBrain:
         else:
             h = history[-1]
             self.contents.append(self.llm.tool_result_turn(h["tool"], h["result"]))
-        t = time.time()
+        t = time.perf_counter()
         content, action, raw = self.llm.step(self.contents, self.config)
-        raw["llm_s"] = round(time.time() - t, 2)
+        raw["llm_s"] = round(time.perf_counter() - t, 2)
         self.raw_log.append(raw)
         if content is not None:
             self.contents.append(content)
@@ -63,7 +63,7 @@ class GeminiBrain:
 
 def run_agent(task, brain, runtime, max_steps=12, verbose=True):
     history = []
-    t0 = time.time()
+    t0 = time.perf_counter()
     for _ in range(max_steps):
         action = brain.next_action(task, history)   # speculation runs during this wait
         if "final" in action:
@@ -71,6 +71,6 @@ def run_agent(task, brain, runtime, max_steps=12, verbose=True):
         result = runtime.call(action["tool"], action["args"])
         history.append({"tool": action["tool"], "args": action["args"], "result": result})
         if verbose:
-            print(f"  [{time.time() - t0:5.1f}s] {action['tool']}({json.dumps(action['args'])})")
+            print(f"  [{time.perf_counter() - t0:5.1f}s] {action['tool']}({json.dumps(action['args'])})")
         runtime.observe(task, history)              # start guessing the NEXT call immediately
-    return action.get("final"), time.time() - t0, history
+    return action.get("final"), time.perf_counter() - t0, history

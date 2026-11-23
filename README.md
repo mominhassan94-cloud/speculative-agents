@@ -1,7 +1,8 @@
 # Speculative Tool Execution for LLM Agents
 
 **CSE 289: AI for Engineers · Team The Mockingducks**
-Khizar Juma · Momin Hassan
+
+Momin Hassan · Khizar Juma 
 
 > AI agents spend a lot of time waiting on tools. What if we guessed the next tool call, started it early, and kept the result only if the guess was right?
 
@@ -58,6 +59,8 @@ User task
 | `speculator.py` | The guessers: a rule-based one and an LLM-based one (Gemini) |
 | `runtime.py` | Runs guesses early, caches results, checks matches, logs hits and misses |
 | `demo.py` | Runs one task with and without speculation and compares timings |
+| `tasks.py` | Evaluation tasks: prompt, scripted plan, and a correctness check for each |
+| `run_eval.py` | Runs every task with and without speculation, writes a CSV to `workspace/results/` and prints a summary |
 | `spec_demo.py` | Shows the speculator alone running on a real input with a real model |
 
 ## Quickstart
@@ -70,6 +73,9 @@ pip install -r requirements.txt
 
 # Offline demo (no API key needed): scripted agent + rule-based guesser
 python demo.py
+
+# Evaluation harness (offline, fast): all tasks x 3 reps x {baseline, rules, oracle}
+python run_eval.py --reps 3
 
 # Real models: copy the env template and put your key in .env (gitignored)
 cp .env.example .env        # then edit GEMINI_API_KEY=... (and optionally GEMINI_MODEL)

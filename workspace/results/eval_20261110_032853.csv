@@ -1,0 +1,241 @@
+task,group,mode,seconds,correct,answer,launched,hits,wasted,blocked,held_back,est_saved_s,wasted_tool_s,speculator_calls,precision,recall,side_effect_early,rep
+flights_compare,search_open,baseline,0.729,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,0,0,0,0,0,0.0,0.0,0,,0.0,False,0
+flights_compare,search_open,oracle,0.502,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.23,0.0,4,1.0,0.75,False,0
+flights_compare,search_open,rules,0.502,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.23,0.0,4,1.0,0.75,False,0
+flights_compare,search_open,oracle,0.508,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.23,0.0,4,1.0,0.75,False,1
+flights_compare,search_open,rules,0.502,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.23,0.0,4,1.0,0.75,False,1
+flights_compare,search_open,baseline,0.73,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,0,0,0,0,0,0.0,0.0,0,,0.0,False,1
+flights_compare,search_open,baseline,0.727,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,0,0,0,0,0,0.0,0.0,0,,0.0,False,2
+flights_compare,search_open,rules,0.514,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.23,0.0,4,1.0,0.75,False,2
+flights_compare,search_open,oracle,0.503,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.24,0.0,4,1.0,0.75,False,2
+flights_compare,search_open,baseline,0.727,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,0,0,0,0,0,0.0,0.0,0,,0.0,False,3
+flights_compare,search_open,oracle,0.505,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.24,0.0,4,1.0,0.75,False,3
+flights_compare,search_open,rules,0.496,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.23,0.0,4,1.0,0.75,False,3
+flights_compare,search_open,baseline,0.737,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,0,0,0,0,0,0.0,0.0,0,,0.0,False,4
+flights_compare,search_open,oracle,0.498,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.23,0.0,4,1.0,0.75,False,4
+flights_compare,search_open,rules,0.504,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.23,0.0,4,1.0,0.75,False,4
+flights_compare,search_open,rules,0.512,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.23,0.0,4,1.0,0.75,False,5
+flights_compare,search_open,baseline,0.72,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,0,0,0,0,0,0.0,0.0,0,,0.0,False,5
+flights_compare,search_open,oracle,0.506,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.23,0.0,4,1.0,0.75,False,5
+flights_compare,search_open,rules,0.509,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.24,0.0,4,1.0,0.75,False,6
+flights_compare,search_open,baseline,0.728,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,0,0,0,0,0,0.0,0.0,0,,0.0,False,6
+flights_compare,search_open,oracle,0.506,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.24,0.0,4,1.0,0.75,False,6
+flights_compare,search_open,oracle,0.503,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.23,0.0,4,1.0,0.75,False,7
+flights_compare,search_open,baseline,0.731,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,0,0,0,0,0,0.0,0.0,0,,0.0,False,7
+flights_compare,search_open,rules,0.496,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.23,0.0,4,1.0,0.75,False,7
+flights_compare,search_open,oracle,0.501,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.24,0.0,4,1.0,0.75,False,8
+flights_compare,search_open,rules,0.5,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.24,0.0,4,1.0,0.75,False,8
+flights_compare,search_open,baseline,0.731,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,0,0,0,0,0,0.0,0.0,0,,0.0,False,8
+flights_compare,search_open,rules,0.501,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.24,0.0,4,1.0,0.75,False,9
+flights_compare,search_open,baseline,0.729,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,0,0,0,0,0,0.0,0.0,0,,0.0,False,9
+flights_compare,search_open,oracle,0.499,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.23,0.0,4,1.0,0.75,False,9
+flights_compare,search_open,oracle,0.502,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.23,0.0,4,1.0,0.75,False,10
+flights_compare,search_open,baseline,0.725,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,0,0,0,0,0,0.0,0.0,0,,0.0,False,10
+flights_compare,search_open,rules,0.504,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.23,0.0,4,1.0,0.75,False,10
+flights_compare,search_open,rules,0.505,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.23,0.0,4,1.0,0.75,False,11
+flights_compare,search_open,baseline,0.737,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,0,0,0,0,0,0.0,0.0,0,,0.0,False,11
+flights_compare,search_open,oracle,0.505,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.23,0.0,4,1.0,0.75,False,11
+flights_compare,search_open,baseline,0.748,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,0,0,0,0,0,0.0,0.0,0,,0.0,False,12
+flights_compare,search_open,rules,0.5,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.23,0.0,4,1.0,0.75,False,12
+flights_compare,search_open,oracle,0.501,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.23,0.0,4,1.0,0.75,False,12
+flights_compare,search_open,oracle,0.498,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.24,0.0,4,1.0,0.75,False,13
+flights_compare,search_open,baseline,0.735,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,0,0,0,0,0,0.0,0.0,0,,0.0,False,13
+flights_compare,search_open,rules,0.502,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.24,0.0,4,1.0,0.75,False,13
+flights_compare,search_open,baseline,0.734,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,0,0,0,0,0,0.0,0.0,0,,0.0,False,14
+flights_compare,search_open,oracle,0.506,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.23,0.0,4,1.0,0.75,False,14
+flights_compare,search_open,rules,0.503,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.24,0.0,4,1.0,0.75,False,14
+flights_compare,search_open,oracle,0.487,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.23,0.0,4,1.0,0.75,False,15
+flights_compare,search_open,baseline,0.738,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,0,0,0,0,0,0.0,0.0,0,,0.0,False,15
+flights_compare,search_open,rules,0.502,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.24,0.0,4,1.0,0.75,False,15
+flights_compare,search_open,baseline,0.741,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,0,0,0,0,0,0.0,0.0,0,,0.0,False,16
+flights_compare,search_open,rules,0.506,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.24,0.0,4,1.0,0.75,False,16
+flights_compare,search_open,oracle,0.505,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.24,0.0,4,1.0,0.75,False,16
+flights_compare,search_open,baseline,0.725,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,0,0,0,0,0,0.0,0.0,0,,0.0,False,17
+flights_compare,search_open,oracle,0.501,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.23,0.0,4,1.0,0.75,False,17
+flights_compare,search_open,rules,0.502,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.24,0.0,4,1.0,0.75,False,17
+flights_compare,search_open,rules,0.502,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.24,0.0,4,1.0,0.75,False,18
+flights_compare,search_open,oracle,0.504,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.24,0.0,4,1.0,0.75,False,18
+flights_compare,search_open,baseline,0.731,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,0,0,0,0,0,0.0,0.0,0,,0.0,False,18
+flights_compare,search_open,oracle,0.502,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.23,0.0,4,1.0,0.75,False,19
+flights_compare,search_open,rules,0.498,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.24,0.0,4,1.0,0.75,False,19
+flights_compare,search_open,baseline,0.733,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,0,0,0,0,0,0.0,0.0,0,,0.0,False,19
+web_read_all,search_open,rules,0.476,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",1,1,0,0,0,0.07,0.0,3,1.0,0.333,False,0
+web_read_all,search_open,baseline,0.535,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",0,0,0,0,0,0.0,0.0,0,,0.0,False,0
+web_read_all,search_open,oracle,0.406,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",2,2,0,0,0,0.12,0.0,3,1.0,0.667,False,0
+web_read_all,search_open,baseline,0.537,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",0,0,0,0,0,0.0,0.0,0,,0.0,False,1
+web_read_all,search_open,rules,0.475,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",1,1,0,0,0,0.06,0.0,3,1.0,0.333,False,1
+web_read_all,search_open,oracle,0.404,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",2,2,0,0,0,0.13,0.0,3,1.0,0.667,False,1
+web_read_all,search_open,oracle,0.408,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",2,2,0,0,0,0.13,0.0,3,1.0,0.667,False,2
+web_read_all,search_open,baseline,0.538,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",0,0,0,0,0,0.0,0.0,0,,0.0,False,2
+web_read_all,search_open,rules,0.48,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",1,1,0,0,0,0.07,0.0,3,1.0,0.333,False,2
+web_read_all,search_open,baseline,0.544,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",0,0,0,0,0,0.0,0.0,0,,0.0,False,3
+web_read_all,search_open,rules,0.478,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",1,1,0,0,0,0.06,0.0,3,1.0,0.333,False,3
+web_read_all,search_open,oracle,0.402,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",2,2,0,0,0,0.13,0.0,3,1.0,0.667,False,3
+web_read_all,search_open,rules,0.472,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",1,1,0,0,0,0.06,0.0,3,1.0,0.333,False,4
+web_read_all,search_open,baseline,0.539,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",0,0,0,0,0,0.0,0.0,0,,0.0,False,4
+web_read_all,search_open,oracle,0.416,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",2,2,0,0,0,0.13,0.0,3,1.0,0.667,False,4
+web_read_all,search_open,rules,0.475,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",1,1,0,0,0,0.07,0.0,3,1.0,0.333,False,5
+web_read_all,search_open,oracle,0.413,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",2,2,0,0,0,0.13,0.0,3,1.0,0.667,False,5
+web_read_all,search_open,baseline,0.543,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",0,0,0,0,0,0.0,0.0,0,,0.0,False,5
+web_read_all,search_open,rules,0.476,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",1,1,0,0,0,0.07,0.0,3,1.0,0.333,False,6
+web_read_all,search_open,oracle,0.405,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",2,2,0,0,0,0.13,0.0,3,1.0,0.667,False,6
+web_read_all,search_open,baseline,0.531,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",0,0,0,0,0,0.0,0.0,0,,0.0,False,6
+web_read_all,search_open,baseline,0.54,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",0,0,0,0,0,0.0,0.0,0,,0.0,False,7
+web_read_all,search_open,rules,0.476,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",1,1,0,0,0,0.07,0.0,3,1.0,0.333,False,7
+web_read_all,search_open,oracle,0.413,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",2,2,0,0,0,0.13,0.0,3,1.0,0.667,False,7
+web_read_all,search_open,rules,0.47,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",1,1,0,0,0,0.06,0.0,3,1.0,0.333,False,8
+web_read_all,search_open,oracle,0.409,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",2,2,0,0,0,0.12,0.0,3,1.0,0.667,False,8
+web_read_all,search_open,baseline,0.539,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",0,0,0,0,0,0.0,0.0,0,,0.0,False,8
+web_read_all,search_open,baseline,0.539,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",0,0,0,0,0,0.0,0.0,0,,0.0,False,9
+web_read_all,search_open,oracle,0.41,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",2,2,0,0,0,0.13,0.0,3,1.0,0.667,False,9
+web_read_all,search_open,rules,0.479,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",1,1,0,0,0,0.07,0.0,3,1.0,0.333,False,9
+web_read_all,search_open,oracle,0.407,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",2,2,0,0,0,0.13,0.0,3,1.0,0.667,False,10
+web_read_all,search_open,rules,0.478,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",1,1,0,0,0,0.07,0.0,3,1.0,0.333,False,10
+web_read_all,search_open,baseline,0.531,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",0,0,0,0,0,0.0,0.0,0,,0.0,False,10
+web_read_all,search_open,baseline,0.534,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",0,0,0,0,0,0.0,0.0,0,,0.0,False,11
+web_read_all,search_open,rules,0.472,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",1,1,0,0,0,0.07,0.0,3,1.0,0.333,False,11
+web_read_all,search_open,oracle,0.403,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",2,2,0,0,0,0.13,0.0,3,1.0,0.667,False,11
+web_read_all,search_open,rules,0.465,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",1,1,0,0,0,0.07,0.0,3,1.0,0.333,False,12
+web_read_all,search_open,baseline,0.528,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",0,0,0,0,0,0.0,0.0,0,,0.0,False,12
+web_read_all,search_open,oracle,0.404,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",2,2,0,0,0,0.12,0.0,3,1.0,0.667,False,12
+web_read_all,search_open,baseline,0.538,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",0,0,0,0,0,0.0,0.0,0,,0.0,False,13
+web_read_all,search_open,rules,0.462,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",1,1,0,0,0,0.06,0.0,3,1.0,0.333,False,13
+web_read_all,search_open,oracle,0.408,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",2,2,0,0,0,0.13,0.0,3,1.0,0.667,False,13
+web_read_all,search_open,rules,0.478,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",1,1,0,0,0,0.07,0.0,3,1.0,0.333,False,14
+web_read_all,search_open,baseline,0.534,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",0,0,0,0,0,0.0,0.0,0,,0.0,False,14
+web_read_all,search_open,oracle,0.403,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",2,2,0,0,0,0.13,0.0,3,1.0,0.667,False,14
+web_read_all,search_open,baseline,0.539,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",0,0,0,0,0,0.0,0.0,0,,0.0,False,15
+web_read_all,search_open,rules,0.473,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",1,1,0,0,0,0.06,0.0,3,1.0,0.333,False,15
+web_read_all,search_open,oracle,0.405,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",2,2,0,0,0,0.13,0.0,3,1.0,0.667,False,15
+web_read_all,search_open,oracle,0.41,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",2,2,0,0,0,0.13,0.0,3,1.0,0.667,False,16
+web_read_all,search_open,baseline,0.536,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",0,0,0,0,0,0.0,0.0,0,,0.0,False,16
+web_read_all,search_open,rules,0.481,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",1,1,0,0,0,0.06,0.0,3,1.0,0.333,False,16
+web_read_all,search_open,baseline,0.535,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",0,0,0,0,0,0.0,0.0,0,,0.0,False,17
+web_read_all,search_open,rules,0.479,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",1,1,0,0,0,0.06,0.0,3,1.0,0.333,False,17
+web_read_all,search_open,oracle,0.408,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",2,2,0,0,0,0.13,0.0,3,1.0,0.667,False,17
+web_read_all,search_open,oracle,0.408,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",2,2,0,0,0,0.13,0.0,3,1.0,0.667,False,18
+web_read_all,search_open,baseline,0.541,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",0,0,0,0,0,0.0,0.0,0,,0.0,False,18
+web_read_all,search_open,rules,0.468,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",1,1,0,0,0,0.07,0.0,3,1.0,0.333,False,18
+web_read_all,search_open,oracle,0.412,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",2,2,0,0,0,0.13,0.0,3,1.0,0.667,False,19
+web_read_all,search_open,baseline,0.536,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",0,0,0,0,0,0.0,0.0,0,,0.0,False,19
+web_read_all,search_open,rules,0.473,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",1,1,0,0,0,0.06,0.0,3,1.0,0.333,False,19
+trip_prep,vague,rules,0.458,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,3,,0.0,False,0
+trip_prep,vague,oracle,0.364,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",2,2,0,0,0,0.09,0.0,3,1.0,0.667,False,0
+trip_prep,vague,baseline,0.447,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,0,,0.0,False,0
+trip_prep,vague,oracle,0.365,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",2,2,0,0,0,0.09,0.0,3,1.0,0.667,False,1
+trip_prep,vague,rules,0.456,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,3,,0.0,False,1
+trip_prep,vague,baseline,0.462,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,0,,0.0,False,1
+trip_prep,vague,oracle,0.365,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",2,2,0,0,0,0.09,0.0,3,1.0,0.667,False,2
+trip_prep,vague,baseline,0.462,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,0,,0.0,False,2
+trip_prep,vague,rules,0.454,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,3,,0.0,False,2
+trip_prep,vague,rules,0.455,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,3,,0.0,False,3
+trip_prep,vague,oracle,0.365,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",2,2,0,0,0,0.1,0.0,3,1.0,0.667,False,3
+trip_prep,vague,baseline,0.451,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,0,,0.0,False,3
+trip_prep,vague,rules,0.456,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,3,,0.0,False,4
+trip_prep,vague,oracle,0.362,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",2,2,0,0,0,0.09,0.0,3,1.0,0.667,False,4
+trip_prep,vague,baseline,0.456,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,0,,0.0,False,4
+trip_prep,vague,oracle,0.359,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",2,2,0,0,0,0.09,0.0,3,1.0,0.667,False,5
+trip_prep,vague,rules,0.463,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,3,,0.0,False,5
+trip_prep,vague,baseline,0.454,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,0,,0.0,False,5
+trip_prep,vague,baseline,0.459,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,0,,0.0,False,6
+trip_prep,vague,rules,0.452,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,3,,0.0,False,6
+trip_prep,vague,oracle,0.363,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",2,2,0,0,0,0.09,0.0,3,1.0,0.667,False,6
+trip_prep,vague,rules,0.458,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,3,,0.0,False,7
+trip_prep,vague,baseline,0.455,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,0,,0.0,False,7
+trip_prep,vague,oracle,0.353,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",2,2,0,0,0,0.09,0.0,3,1.0,0.667,False,7
+trip_prep,vague,oracle,0.362,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",2,2,0,0,0,0.09,0.0,3,1.0,0.667,False,8
+trip_prep,vague,rules,0.461,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,3,,0.0,False,8
+trip_prep,vague,baseline,0.457,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,0,,0.0,False,8
+trip_prep,vague,baseline,0.451,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,0,,0.0,False,9
+trip_prep,vague,rules,0.461,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,3,,0.0,False,9
+trip_prep,vague,oracle,0.369,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",2,2,0,0,0,0.09,0.0,3,1.0,0.667,False,9
+trip_prep,vague,baseline,0.453,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,0,,0.0,False,10
+trip_prep,vague,oracle,0.368,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",2,2,0,0,0,0.1,0.0,3,1.0,0.667,False,10
+trip_prep,vague,rules,0.455,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,3,,0.0,False,10
+trip_prep,vague,baseline,0.461,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,0,,0.0,False,11
+trip_prep,vague,rules,0.451,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,3,,0.0,False,11
+trip_prep,vague,oracle,0.368,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",2,2,0,0,0,0.09,0.0,3,1.0,0.667,False,11
+trip_prep,vague,oracle,0.359,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",2,2,0,0,0,0.1,0.0,3,1.0,0.667,False,12
+trip_prep,vague,rules,0.455,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,3,,0.0,False,12
+trip_prep,vague,baseline,0.461,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,0,,0.0,False,12
+trip_prep,vague,rules,0.449,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,3,,0.0,False,13
+trip_prep,vague,baseline,0.454,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,0,,0.0,False,13
+trip_prep,vague,oracle,0.363,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",2,2,0,0,0,0.09,0.0,3,1.0,0.667,False,13
+trip_prep,vague,baseline,0.451,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,0,,0.0,False,14
+trip_prep,vague,oracle,0.37,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",2,2,0,0,0,0.09,0.0,3,1.0,0.667,False,14
+trip_prep,vague,rules,0.454,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,3,,0.0,False,14
+trip_prep,vague,rules,0.458,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,3,,0.0,False,15
+trip_prep,vague,oracle,0.366,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",2,2,0,0,0,0.09,0.0,3,1.0,0.667,False,15
+trip_prep,vague,baseline,0.461,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,0,,0.0,False,15
+trip_prep,vague,oracle,0.364,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",2,2,0,0,0,0.09,0.0,3,1.0,0.667,False,16
+trip_prep,vague,rules,0.46,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,3,,0.0,False,16
+trip_prep,vague,baseline,0.451,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,0,,0.0,False,16
+trip_prep,vague,rules,0.455,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,3,,0.0,False,17
+trip_prep,vague,oracle,0.368,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",2,2,0,0,0,0.1,0.0,3,1.0,0.667,False,17
+trip_prep,vague,baseline,0.455,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,0,,0.0,False,17
+trip_prep,vague,oracle,0.363,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",2,2,0,0,0,0.09,0.0,3,1.0,0.667,False,18
+trip_prep,vague,baseline,0.455,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,0,,0.0,False,18
+trip_prep,vague,rules,0.459,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,3,,0.0,False,18
+trip_prep,vague,baseline,0.452,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,0,,0.0,False,19
+trip_prep,vague,oracle,0.371,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",2,2,0,0,0,0.09,0.0,3,1.0,0.667,False,19
+trip_prep,vague,rules,0.456,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,0.0,3,,0.0,False,19
+book_cheapest,side_effect,rules,0.846,True,Booked WN219 and emailed confirmation.,3,3,0,0,0,0.23,0.0,6,1.0,0.75,False,0
+book_cheapest,side_effect,oracle,0.852,True,Booked WN219 and emailed confirmation.,3,3,0,2,0,0.23,0.0,6,1.0,0.75,False,0
+book_cheapest,side_effect,baseline,1.079,True,Booked WN219 and emailed confirmation.,0,0,0,0,0,0.0,0.0,0,,0.0,False,0
+book_cheapest,side_effect,rules,0.842,True,Booked WN219 and emailed confirmation.,3,3,0,0,0,0.23,0.0,6,1.0,0.75,False,1
+book_cheapest,side_effect,oracle,0.837,True,Booked WN219 and emailed confirmation.,3,3,0,2,0,0.23,0.0,6,1.0,0.75,False,1
+book_cheapest,side_effect,baseline,1.075,True,Booked WN219 and emailed confirmation.,0,0,0,0,0,0.0,0.0,0,,0.0,False,1
+book_cheapest,side_effect,rules,0.833,True,Booked WN219 and emailed confirmation.,3,3,0,0,0,0.23,0.0,6,1.0,0.75,False,2
+book_cheapest,side_effect,oracle,0.839,True,Booked WN219 and emailed confirmation.,3,3,0,2,0,0.24,0.0,6,1.0,0.75,False,2
+book_cheapest,side_effect,baseline,1.071,True,Booked WN219 and emailed confirmation.,0,0,0,0,0,0.0,0.0,0,,0.0,False,2
+book_cheapest,side_effect,rules,0.837,True,Booked WN219 and emailed confirmation.,3,3,0,0,0,0.23,0.0,6,1.0,0.75,False,3
+book_cheapest,side_effect,oracle,0.844,True,Booked WN219 and emailed confirmation.,3,3,0,2,0,0.23,0.0,6,1.0,0.75,False,3
+book_cheapest,side_effect,baseline,1.073,True,Booked WN219 and emailed confirmation.,0,0,0,0,0,0.0,0.0,0,,0.0,False,3
+book_cheapest,side_effect,rules,0.848,True,Booked WN219 and emailed confirmation.,3,3,0,0,0,0.23,0.0,6,1.0,0.75,False,4
+book_cheapest,side_effect,baseline,1.075,True,Booked WN219 and emailed confirmation.,0,0,0,0,0,0.0,0.0,0,,0.0,False,4
+book_cheapest,side_effect,oracle,0.846,True,Booked WN219 and emailed confirmation.,3,3,0,2,0,0.23,0.0,6,1.0,0.75,False,4
+book_cheapest,side_effect,rules,0.842,True,Booked WN219 and emailed confirmation.,3,3,0,0,0,0.23,0.0,6,1.0,0.75,False,5
+book_cheapest,side_effect,baseline,1.07,True,Booked WN219 and emailed confirmation.,0,0,0,0,0,0.0,0.0,0,,0.0,False,5
+book_cheapest,side_effect,oracle,0.843,True,Booked WN219 and emailed confirmation.,3,3,0,2,0,0.24,0.0,6,1.0,0.75,False,5
+book_cheapest,side_effect,oracle,0.843,True,Booked WN219 and emailed confirmation.,3,3,0,2,0,0.24,0.0,6,1.0,0.75,False,6
+book_cheapest,side_effect,baseline,1.074,True,Booked WN219 and emailed confirmation.,0,0,0,0,0,0.0,0.0,0,,0.0,False,6
+book_cheapest,side_effect,rules,0.845,True,Booked WN219 and emailed confirmation.,3,3,0,0,0,0.24,0.0,6,1.0,0.75,False,6
+book_cheapest,side_effect,oracle,0.843,True,Booked WN219 and emailed confirmation.,3,3,0,2,0,0.24,0.0,6,1.0,0.75,False,7
+book_cheapest,side_effect,baseline,1.091,True,Booked WN219 and emailed confirmation.,0,0,0,0,0,0.0,0.0,0,,0.0,False,7
+book_cheapest,side_effect,rules,0.849,True,Booked WN219 and emailed confirmation.,3,3,0,0,0,0.24,0.0,6,1.0,0.75,False,7
+book_cheapest,side_effect,rules,0.842,True,Booked WN219 and emailed confirmation.,3,3,0,0,0,0.23,0.0,6,1.0,0.75,False,8
+book_cheapest,side_effect,oracle,0.848,True,Booked WN219 and emailed confirmation.,3,3,0,2,0,0.23,0.0,6,1.0,0.75,False,8
+book_cheapest,side_effect,baseline,1.084,True,Booked WN219 and emailed confirmation.,0,0,0,0,0,0.0,0.0,0,,0.0,False,8
+book_cheapest,side_effect,rules,0.841,True,Booked WN219 and emailed confirmation.,3,3,0,0,0,0.23,0.0,6,1.0,0.75,False,9
+book_cheapest,side_effect,oracle,0.844,True,Booked WN219 and emailed confirmation.,3,3,0,2,0,0.24,0.0,6,1.0,0.75,False,9
+book_cheapest,side_effect,baseline,1.078,True,Booked WN219 and emailed confirmation.,0,0,0,0,0,0.0,0.0,0,,0.0,False,9
+book_cheapest,side_effect,rules,0.844,True,Booked WN219 and emailed confirmation.,3,3,0,0,0,0.24,0.0,6,1.0,0.75,False,10
+book_cheapest,side_effect,baseline,1.057,True,Booked WN219 and emailed confirmation.,0,0,0,0,0,0.0,0.0,0,,0.0,False,10
+book_cheapest,side_effect,oracle,0.84,True,Booked WN219 and emailed confirmation.,3,3,0,2,0,0.24,0.0,6,1.0,0.75,False,10
+book_cheapest,side_effect,oracle,0.848,True,Booked WN219 and emailed confirmation.,3,3,0,2,0,0.24,0.0,6,1.0,0.75,False,11
+book_cheapest,side_effect,baseline,1.064,True,Booked WN219 and emailed confirmation.,0,0,0,0,0,0.0,0.0,0,,0.0,False,11
+book_cheapest,side_effect,rules,0.835,True,Booked WN219 and emailed confirmation.,3,3,0,0,0,0.23,0.0,6,1.0,0.75,False,11
+book_cheapest,side_effect,rules,0.838,True,Booked WN219 and emailed confirmation.,3,3,0,0,0,0.23,0.0,6,1.0,0.75,False,12
+book_cheapest,side_effect,baseline,1.083,True,Booked WN219 and emailed confirmation.,0,0,0,0,0,0.0,0.0,0,,0.0,False,12
+book_cheapest,side_effect,oracle,0.838,True,Booked WN219 and emailed confirmation.,3,3,0,2,0,0.23,0.0,6,1.0,0.75,False,12
+book_cheapest,side_effect,rules,0.831,True,Booked WN219 and emailed confirmation.,3,3,0,0,0,0.24,0.0,6,1.0,0.75,False,13
+book_cheapest,side_effect,baseline,1.071,True,Booked WN219 and emailed confirmation.,0,0,0,0,0,0.0,0.0,0,,0.0,False,13
+book_cheapest,side_effect,oracle,0.842,True,Booked WN219 and emailed confirmation.,3,3,0,2,0,0.23,0.0,6,1.0,0.75,False,13
+book_cheapest,side_effect,baseline,1.067,True,Booked WN219 and emailed confirmation.,0,0,0,0,0,0.0,0.0,0,,0.0,False,14
+book_cheapest,side_effect,rules,0.836,True,Booked WN219 and emailed confirmation.,3,3,0,0,0,0.23,0.0,6,1.0,0.75,False,14
+book_cheapest,side_effect,oracle,0.849,True,Booked WN219 and emailed confirmation.,3,3,0,2,0,0.24,0.0,6,1.0,0.75,False,14
+book_cheapest,side_effect,rules,0.837,True,Booked WN219 and emailed confirmation.,3,3,0,0,0,0.23,0.0,6,1.0,0.75,False,15
+book_cheapest,side_effect,baseline,1.066,True,Booked WN219 and emailed confirmation.,0,0,0,0,0,0.0,0.0,0,,0.0,False,15
+book_cheapest,side_effect,oracle,0.835,True,Booked WN219 and emailed confirmation.,3,3,0,2,0,0.24,0.0,6,1.0,0.75,False,15
+book_cheapest,side_effect,oracle,0.834,True,Booked WN219 and emailed confirmation.,3,3,0,2,0,0.23,0.0,6,1.0,0.75,False,16
+book_cheapest,side_effect,baseline,1.074,True,Booked WN219 and emailed confirmation.,0,0,0,0,0,0.0,0.0,0,,0.0,False,16
+book_cheapest,side_effect,rules,0.839,True,Booked WN219 and emailed confirmation.,3,3,0,0,0,0.23,0.0,6,1.0,0.75,False,16
+book_cheapest,side_effect,rules,0.838,True,Booked WN219 and emailed confirmation.,3,3,0,0,0,0.24,0.0,6,1.0,0.75,False,17
+book_cheapest,side_effect,oracle,0.841,True,Booked WN219 and emailed confirmation.,3,3,0,2,0,0.23,0.0,6,1.0,0.75,False,17
+book_cheapest,side_effect,baseline,1.072,True,Booked WN219 and emailed confirmation.,0,0,0,0,0,0.0,0.0,0,,0.0,False,17
+book_cheapest,side_effect,baseline,1.054,True,Booked WN219 and emailed confirmation.,0,0,0,0,0,0.0,0.0,0,,0.0,False,18
+book_cheapest,side_effect,rules,0.838,True,Booked WN219 and emailed confirmation.,3,3,0,0,0,0.24,0.0,6,1.0,0.75,False,18
+book_cheapest,side_effect,oracle,0.83,True,Booked WN219 and emailed confirmation.,3,3,0,2,0,0.23,0.0,6,1.0,0.75,False,18
+book_cheapest,side_effect,baseline,1.07,True,Booked WN219 and emailed confirmation.,0,0,0,0,0,0.0,0.0,0,,0.0,False,19
+book_cheapest,side_effect,oracle,0.831,True,Booked WN219 and emailed confirmation.,3,3,0,2,0,0.23,0.0,6,1.0,0.75,False,19
+book_cheapest,side_effect,rules,0.848,True,Booked WN219 and emailed confirmation.,3,3,0,0,0,0.24,0.0,6,1.0,0.75,False,19

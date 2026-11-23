@@ -1,0 +1,37 @@
+task,group,mode,seconds,correct,answer,launched,hits,wasted,blocked,held_back,est_saved_s,side_effect_early,rep
+flights_compare,search_open,baseline,1.432,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,0,0,0,0,0,0.0,False,0
+flights_compare,search_open,rules,0.975,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.46,False,0
+flights_compare,search_open,oracle,0.979,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.46,False,0
+flights_compare,search_open,baseline,1.437,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,0,0,0,0,0,0.0,False,1
+flights_compare,search_open,rules,0.973,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.46,False,1
+flights_compare,search_open,oracle,0.976,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.46,False,1
+flights_compare,search_open,baseline,1.43,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,0,0,0,0,0,0.0,False,2
+flights_compare,search_open,rules,0.97,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.46,False,2
+flights_compare,search_open,oracle,0.979,True,Nonstop totals with bag: UA482: $229; WN219: $204; F9133: $207,3,3,0,0,0,0.46,False,2
+web_read_all,search_open,baseline,1.045,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",0,0,0,0,0,0.0,False,0
+web_read_all,search_open,rules,0.925,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",1,1,0,0,0,0.12,False,0
+web_read_all,search_open,oracle,0.802,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",2,2,0,0,0,0.24,False,0
+web_read_all,search_open,baseline,1.046,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",0,0,0,0,0,0.0,False,1
+web_read_all,search_open,rules,0.918,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",1,1,0,0,0,0.12,False,1
+web_read_all,search_open,oracle,0.803,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",2,2,0,0,0,0.25,False,1
+web_read_all,search_open,baseline,1.047,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",0,0,0,0,0,0.0,False,2
+web_read_all,search_open,rules,0.929,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",1,1,0,0,0,0.13,False,2
+web_read_all,search_open,oracle,0.8,True,"Read 2 pages: Denver airport guide: ground transport, lounges, parking. | Checked bag fees vary by fare class and airline.",2,2,0,0,0,0.25,False,2
+trip_prep,vague,baseline,0.883,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,False,0
+trip_prep,vague,rules,0.889,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,False,0
+trip_prep,vague,oracle,0.698,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",2,2,0,0,0,0.18,False,0
+trip_prep,vague,baseline,0.875,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,False,1
+trip_prep,vague,rules,0.892,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,False,1
+trip_prep,vague,oracle,0.711,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",2,2,0,0,0,0.18,False,1
+trip_prep,vague,baseline,0.887,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,False,2
+trip_prep,vague,rules,0.888,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",0,0,0,0,0,0.0,False,2
+trip_prep,vague,oracle,0.707,True,"Trip prep: sunny, 18C, 10:00 team meeting, Denver International",2,2,0,0,0,0.18,False,2
+book_cheapest,side_effect,baseline,2.101,True,Booked WN219 and emailed confirmation.,0,0,0,0,0,0.0,False,0
+book_cheapest,side_effect,rules,1.647,True,Booked WN219 and emailed confirmation.,3,3,0,0,0,0.46,False,0
+book_cheapest,side_effect,oracle,1.646,True,Booked WN219 and emailed confirmation.,3,3,0,2,0,0.46,False,0
+book_cheapest,side_effect,baseline,2.098,True,Booked WN219 and emailed confirmation.,0,0,0,0,0,0.0,False,1
+book_cheapest,side_effect,rules,1.636,True,Booked WN219 and emailed confirmation.,3,3,0,0,0,0.46,False,1
+book_cheapest,side_effect,oracle,1.643,True,Booked WN219 and emailed confirmation.,3,3,0,2,0,0.46,False,1
+book_cheapest,side_effect,baseline,2.098,True,Booked WN219 and emailed confirmation.,0,0,0,0,0,0.0,False,2
+book_cheapest,side_effect,rules,1.648,True,Booked WN219 and emailed confirmation.,3,3,0,0,0,0.47,False,2
+book_cheapest,side_effect,oracle,1.637,True,Booked WN219 and emailed confirmation.,3,3,0,2,0,0.46,False,2
