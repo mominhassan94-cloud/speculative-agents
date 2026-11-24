@@ -59,7 +59,8 @@ User task
 | `speculator.py` | The guessers: a rule-based one and an LLM-based one (Gemini) |
 | `runtime.py` | Runs guesses early, caches results, checks matches, logs hits and misses |
 | `demo.py` | Runs one task with and without speculation and compares timings |
-| `tasks.py` | Evaluation tasks: prompt, scripted plan, and a correctness check for each |
+| `tasks.py` | Train tasks (14): prompt, scripted plan, fact-based answer check, optional world-state check |
+| `tasks_heldout.py` | Held-out tasks (12), shaped differently from train. Don't read while building a speculator |
 | `run_eval.py` | Runs every task with and without speculation, writes a CSV to `workspace/results/` and prints a summary |
 | `spec_demo.py` | Shows the speculator alone running on a real input with a real model |
 
@@ -74,8 +75,9 @@ pip install -r requirements.txt
 # Offline demo (no API key needed): scripted agent + rule-based guesser
 python demo.py
 
-# Evaluation harness (offline, fast): all tasks x 3 reps x {baseline, rules, oracle}
+# Evaluation harness (offline, fast): train tasks x 3 reps x {baseline, rules, oracle, ...}
 python run_eval.py --reps 3
+python run_eval.py --reps 3 --split heldout   # only once a speculator is frozen
 
 # Real models: copy the env template and put your key in .env (gitignored)
 cp .env.example .env        # then edit GEMINI_API_KEY=... (and optionally GEMINI_MODEL)
@@ -98,7 +100,7 @@ Never commit API keys. Keep them in a `.env` file, which is listed in `.gitignor
 
 ## Evaluation plan
 
-About 50 multi-step tasks, each run three times with and without speculation. We measure:
+26 multi-step tasks (14 train, 12 held-out), each run several times with and without speculation. Speculators are built on train tasks and scored on held-out tasks. We measure:
 
 - total time
 - how often guesses are right
@@ -118,7 +120,7 @@ The end result is a chart of **time saved vs. calls wasted**.
 
 - [x] Mock tools, baseline agent, and speculator prototype
 - [x] Runtime with cache and safety gate
-- [ ] About 50 test tasks *(milestone: Nov 1)*
+- [x] 26 test tasks with a train / held-out split (plan revised from ~50 to 25-30 with a held-out split)
 - [ ] Guessing and early execution working end to end *(milestone: Nov 15)*
 - [ ] Full evaluation, results chart, and demo *(milestone: Dec 1)*
 

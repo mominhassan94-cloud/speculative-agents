@@ -30,7 +30,8 @@ from mock_tools import TOOLS
 from agent import run_agent
 from runtime import Runtime
 from speculator import RuleSpeculator, Guess
-from tasks import TASKS
+from tasks import TRAIN_TASKS
+from tasks_heldout import HELDOUT_TASKS
 
 
 class PlanBrain:
@@ -97,8 +98,9 @@ def run_one(task, mode, think_s):
     real_read_calls = len(history) - real_side_effects
     executed_side_effects = sum(SIDE_EFFECT_EXECUTIONS.values())
     row = {
-        "task": task.id, "group": task.group, "mode": mode, "seconds": round(secs, 3),
-        "correct": bool(task.check(answer or "")), "answer": answer,
+        "task": task.id, "group": task.group, "split": task.split, "mode": mode, "seconds": round(secs, 3),
+        "correct": bool(task.check(answer or "")) and (task.expect is None or bool(task.expect(mock_tools.WORLD))),
+        "answer": answer,
         "launched": s["speculative_calls"], "hits": s["hits"], "wasted": s["wasted"],
         "blocked": sum(1 for l in rt.log if l.startswith("BLOCKED")),
         "held_back": sum(1 for l in rt.log if l.startswith("held back")),
@@ -113,6 +115,8 @@ def run_one(task, mode, think_s):
         "holds_left_over": len(mock_tools.WORLD["holds"]),
         "canary_fetched": mock_tools.WORLD["canary_fetches"] > 0,
         "booked": ",".join(mock_tools.WORLD["bookings"]),
+        "hotel_booked": ",".join(mock_tools.WORLD["hotel_bookings"]),
+        "emails_sent": len(mock_tools.WORLD["emails"]),
     }
     return row, rt.events
 
@@ -165,7 +169,9 @@ def main():
     p.add_argument("--seed", type=int, default=0, help="seed for mode-order shuffling")
     p.add_argument("--scale", type=float, default=0.1, help="multiply tool latency by this (1.0 = realistic)")
     p.add_argument("--think", type=float, default=1.5, help="simulated LLM thinking time per step, seconds (before scaling)")
-    p.add_argument("--tasks", default=None, help="comma-separated task ids (default: all)")
+    p.add_argument("--tasks", default=None, help="comma-separated task ids (default: all in --split)")
+    p.add_argument("--split", default="train", choices=["train", "heldout", "all"],
+                   help="which tasks to run; keep held-out unseen until a speculator is frozen")
     p.add_argument("--modes", default="baseline,rules,rules+prov,rules+prep,rules+prep+prov,oracle")
     p.add_argument("--out", default=None)
     a = p.parse_args()
@@ -173,7 +179,8 @@ def main():
     mock_tools.LATENCY_SCALE = a.scale
     think_s = a.think * a.scale
     _instrument_side_effects()
-    tasks = [t for t in TASKS if not a.tasks or t.id in a.tasks.split(",")]
+    pool = {"train": TRAIN_TASKS, "heldout": HELDOUT_TASKS, "all": TRAIN_TASKS + HELDOUT_TASKS}[a.split]
+    tasks = [t for t in pool if not a.tasks or t.id in a.tasks.split(",")]
     modes = a.modes.split(",")
 
     rng = random.Random(a.seed)
