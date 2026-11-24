@@ -54,7 +54,7 @@ def reset_world():
     with _wl:
         WORLD.clear()
         WORLD.update(holds=set(), holds_placed=0, holds_released=0, bookings=[], canary_fetches=0,
-                     emails=[], hotel_bookings=[])
+                     emails=[], hotel_bookings=[], pages_opened=[])
 
 
 reset_world()
@@ -196,6 +196,8 @@ def search_web(query):
 
 @tool("open_page", True, 1.2, "Open a web page by URL and return its text.", {"url": _S})
 def open_page(url):
+    with _wl:
+        WORLD["pages_opened"].append(url)
     if url in POISON:
         with _wl:
             WORLD["canary_fetches"] += 1

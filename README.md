@@ -79,6 +79,10 @@ python demo.py
 python run_eval.py --reps 3
 python run_eval.py --reps 3 --split heldout   # only once a speculator is frozen
 
+# Live runs through the same harness (need GEMINI_API_KEY in .env; cost API calls)
+python run_eval.py --modes baseline,llm,llm+prov --reps 10                 # Gemini as the guesser, scripted agent
+python run_eval.py --brain gemini --scale 1 --modes baseline,llm --reps 3  # Gemini agent + Gemini guesser
+
 # Real models: copy the env template and put your key in .env (gitignored)
 cp .env.example .env        # then edit GEMINI_API_KEY=... (and optionally GEMINI_MODEL)
 
