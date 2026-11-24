@@ -1,2 +1,3 @@
 google-genai
 python-dotenv
+matplotlib  # plots.py only

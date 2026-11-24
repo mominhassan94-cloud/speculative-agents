@@ -3,12 +3,39 @@
 Each tool is registered with a read_only flag. Only read_only tools may ever be
 run speculatively. Side-effecting tools (booking, sending) never run early.
 """
+import random
 import threading
 import time
 from dataclasses import dataclass
 from typing import Callable, Optional
 
 LATENCY_SCALE = 1.0  # set <1.0 to speed up experiments
+
+# Backend model for sweeps (both off by default, so ordinary runs are unchanged):
+#   jitter: each call's latency is multiplied by a mean-1 lognormal with this sigma (real APIs have tails)
+#   slots:  at most this many tool calls run at once (1 = a rate-limited API). With unlimited slots a wrong
+#           guess costs no wall time; with few slots it delays the real call, so speculation can lose.
+LATENCY_JITTER = 0.0
+_SLOTS = None
+_jitter_rng = random.Random(0)
+
+
+def set_backend(slots=None, jitter=0.0, seed=0):
+    global _SLOTS, LATENCY_JITTER, _jitter_rng
+    _SLOTS = threading.Semaphore(slots) if slots else None
+    LATENCY_JITTER = jitter
+    _jitter_rng = random.Random(seed)
+
+
+def _simulate_latency(latency_s):
+    d = latency_s * LATENCY_SCALE
+    if LATENCY_JITTER:
+        d *= _jitter_rng.lognormvariate(-LATENCY_JITTER ** 2 / 2, LATENCY_JITTER)
+    if _SLOTS is None:
+        time.sleep(d)
+    else:
+        with _SLOTS:
+            time.sleep(d)
 
 
 @dataclass
@@ -32,7 +59,7 @@ def tool(name, read_only, latency_s, description, props, required=None,
          reversible=False, prepare=None, commit_saving_s=0.0):
     def deco(fn):
         def wrapped(**kwargs):
-            time.sleep(latency_s * LATENCY_SCALE)  # pretend this is a network call
+            _simulate_latency(latency_s)  # pretend this is a network call
             return fn(**kwargs)
         TOOLS[name] = Tool(
             name, wrapped, read_only, latency_s, description,
