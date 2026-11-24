@@ -157,6 +157,8 @@ def run_one(task, mode, think_s, brain="scripted"):
     spec_backoff = getattr(getattr(rt.speculator, "llm", None), "backoff_s", 0.0)
     row = {
         "task": task.id, "group": task.group, "split": task.split, "brain": brain, "mode": mode,
+        "agent_model": getattr(agent, "model", "scripted"),
+        "spec_model": getattr(rt.speculator, "model", getattr(rt.speculator, "name", "none")),
         "seconds": round(secs - agent_backoff, 3), "seconds_raw": round(secs, 3),
         "agent_backoff_s": round(agent_backoff, 2), "spec_backoff_s": round(spec_backoff, 2),
         "agent_calls": len(history),
@@ -276,6 +278,11 @@ def main():
             p.error("oracle modes need --brain scripted")
         modes = [m for m in modes if not m.startswith("oracle")]
 
+    out = a.out or os.path.join("workspace", "results", time.strftime("eval_%Y%m%d_%H%M%S.csv"))
+    os.makedirs(os.path.dirname(out) or ".", exist_ok=True)
+    ev_path = os.path.splitext(out)[0] + ".events.jsonl"
+    csv_f, ev_f, writer = open(out, "w", newline=""), open(ev_path, "w"), None
+
     rng = random.Random(a.seed)
     rows, all_events = [], []
     for task in tasks:
@@ -290,20 +297,22 @@ def main():
                     continue
                 r["rep"] = rep
                 rows.append(r)
-                all_events += [{"task": task.id, "mode": mode, "rep": rep, **e} for e in events]
+                evs = [{"task": task.id, "mode": mode, "rep": rep, **e} for e in events]
+                all_events += evs
+                # write as we go, so an interrupted live run (quota, network) keeps what finished
+                if writer is None:
+                    writer = csv.DictWriter(csv_f, fieldnames=list(r.keys()))
+                    writer.writeheader()
+                writer.writerow(r)
+                csv_f.flush()
+                ev_f.writelines(json.dumps(e) + "\n" for e in evs)
+                ev_f.flush()
             print(f"  {task.id:<18}rep{rep:<3} done")
 
-    out = a.out or os.path.join("workspace", "results", time.strftime("eval_%Y%m%d_%H%M%S.csv"))
-    os.makedirs(os.path.dirname(out), exist_ok=True)
-    with open(out, "w", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=list(rows[0].keys()))
-        w.writeheader()
-        w.writerows(rows)
-    ev_path = os.path.splitext(out)[0] + ".events.jsonl"
-    with open(ev_path, "w") as f:
-        for e in all_events:
-            f.write(json.dumps(e) + "\n")
-    summarize(rows)
+    csv_f.close()
+    ev_f.close()
+    if rows:
+        summarize(rows)
     print(f"\nwrote {len(rows)} runs to {out} and {len(all_events)} call events to {ev_path}")
 
 

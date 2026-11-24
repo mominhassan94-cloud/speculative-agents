@@ -15,16 +15,19 @@ from dotenv import load_dotenv
 
 load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env"))
 
-DEFAULT_MODEL = "gemini-3.5-flash-lite"
+# Agent: a bigger, slower model. Guesser: the smallest, fastest one, so it can finish while the agent thinks.
+# (Pro models have zero quota on the free tier; set GEMINI_MODEL to one if billing is enabled.)
+DEFAULT_MODEL = "gemini-3.5-flash"
+DEFAULT_SPEC_MODEL = "gemini-3.1-flash-lite"
 RETRY_CODES = {429, 500, 503}   # 429 = free-tier rate limit; 500/503 = transient server errors
 
 
 def agent_model():
-    return os.environ.get("GEMINI_MODEL", DEFAULT_MODEL)
+    return os.environ.get("GEMINI_MODEL") or DEFAULT_MODEL
 
 
 def spec_model():
-    return os.environ.get("GEMINI_SPEC_MODEL") or agent_model()
+    return os.environ.get("GEMINI_SPEC_MODEL") or DEFAULT_SPEC_MODEL
 
 
 class RetryStats:

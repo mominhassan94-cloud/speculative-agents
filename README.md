@@ -95,8 +95,8 @@ python demo.py --llm --log-dir logs/        # also save raw model I/O and timing
 | Variable | Meaning |
 |---|---|
 | `GEMINI_API_KEY` | Required for real-model runs |
-| `GEMINI_MODEL` | Model for the agent and the speculator (default `gemini-3.5-flash-lite`) |
-| `GEMINI_SPEC_MODEL` | Optional: a different model for the speculator only |
+| `GEMINI_MODEL` | Model for the agent (default `gemini-3.5-flash`: bigger and slower) |
+| `GEMINI_SPEC_MODEL` | Model for the speculator (default `gemini-3.1-flash-lite`: smallest and fastest) |
 
 All model calls go through `llm_client.py`. HTTP 429 (free-tier rate limit) and transient 5xx errors are retried with exponential backoff, and the time spent in backoff is reported by `demo.py`.
 
