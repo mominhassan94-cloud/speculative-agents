@@ -30,6 +30,10 @@ def spec_model():
     return os.environ.get("GEMINI_SPEC_MODEL") or DEFAULT_SPEC_MODEL
 
 
+class DailyQuotaExceeded(RuntimeError):
+    """The model's per-day request cap is used up; retrying is pointless until it resets."""
+
+
 class RetryStats:
     """Counts rate-limit retries so timing comparisons can report how much time went to backoff."""
 
@@ -65,6 +69,8 @@ class LLMClient:
             try:
                 return self.client.models.generate_content(model=self.model, contents=contents, config=config)
             except errors.APIError as e:
+                if e.code == 429 and "PerDay" in str(e):
+                    raise DailyQuotaExceeded(f"{self.model}: daily request quota used up") from e
                 if e.code not in RETRY_CODES or attempt == self.max_attempts:
                     raise
                 wait = delay + random.uniform(0, 1)

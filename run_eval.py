@@ -41,6 +41,7 @@ from collections import defaultdict
 
 import mock_tools
 from mock_tools import TOOLS
+from llm_client import DailyQuotaExceeded
 from agent import run_agent
 from runtime import Runtime, _key
 from speculator import RuleSpeculator, Guess
@@ -285,13 +286,22 @@ def main():
 
     rng = random.Random(a.seed)
     rows, all_events = [], []
+    stop = False
     for task in tasks:
+        if stop:
+            break
         for rep in range(a.reps):
             order = modes[:]
             rng.shuffle(order)  # no mode always runs first/last
+            if stop:
+                break
             for mode in order:
                 try:
                     r, events = run_one(task, mode, think_s, a.brain)
+                except DailyQuotaExceeded as e:  # every later run would fail too, so stop here
+                    print(f"  STOPPING at {task.id} {mode} rep{rep}: {e}")
+                    stop = True
+                    break
                 except Exception as e:  # a live API failure should not throw away the runs already done
                     print(f"  {task.id} {mode} rep{rep} FAILED: {type(e).__name__}: {e}")
                     continue
