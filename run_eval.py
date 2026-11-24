@@ -211,9 +211,9 @@ def make_runtime(mode, task, spec_delay=0.0, seed=0):
 def run_one(task, mode, think_s, brain="scripted", spec_delay=0.0, seed=0):
     if brain != "scripted" and mode.startswith(("oracle", "noisy")):
         raise ValueError("oracle needs the scripted brain (a real agent has no plan to read)")
+    rt = make_runtime(mode, task, spec_delay, seed)  # first: fitting a mined speculator replays train plans
     SIDE_EFFECT_EXECUTIONS.clear()
     mock_tools.reset_world()
-    rt = make_runtime(mode, task, spec_delay, seed)
     agent = make_brain(brain, task, think_s)
     answer, secs, history = run_agent(task.prompt, agent, rt, verbose=False)
     rt.pool.shutdown(wait=True)  # let in-flight speculation finish so counts are complete
