@@ -52,6 +52,8 @@ class LLMClient:
         self.client = genai.Client()  # reads GEMINI_API_KEY from the environment
         self.model = model or agent_model()
         self.max_attempts = max_attempts
+        self.retries = 0          # this client's own retry count and backoff time (RETRIES is global)
+        self.backoff_s = 0.0
 
     def _generate(self, contents, config):
         from google.genai import errors
@@ -65,6 +67,8 @@ class LLMClient:
                 wait = delay + random.uniform(0, 1)
                 print(f"  [llm_client] HTTP {e.code} from {self.model}, retry {attempt} in {wait:.1f}s")
                 RETRIES.add(wait)
+                self.retries += 1
+                self.backoff_s += wait
                 time.sleep(wait)
                 delay = min(delay * 2, 60)
 

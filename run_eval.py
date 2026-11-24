@@ -19,6 +19,9 @@ Brains (--brain):
   gemini   - a real Gemini agent (GEMINI_MODEL); think time is real, paths can differ per run.
              Use --scale 1 so tool latency is realistic next to real model latency.
 
+Live timing: 'seconds' excludes the agent's rate-limit backoff (kept in seconds_raw and agent_backoff_s).
+A guesser stuck in backoff simply guesses late; that cost stays in, and spec_backoff_s shows it.
+
 Guess accuracy: every guess is scored against the agent's next real call, before any gate.
 guess_name_acc = right tool; guess_exact_acc = right tool AND identical arguments (what a hit needs).
 
@@ -139,7 +142,8 @@ def run_one(task, mode, think_s, brain="scripted"):
     SIDE_EFFECT_EXECUTIONS.clear()
     mock_tools.reset_world()
     rt = make_runtime(mode, task)
-    answer, secs, history = run_agent(task.prompt, make_brain(brain, task, think_s), rt, verbose=False)
+    agent = make_brain(brain, task, think_s)
+    answer, secs, history = run_agent(task.prompt, agent, rt, verbose=False)
     rt.pool.shutdown(wait=True)  # let in-flight speculation finish so counts are complete
     rt.close()                   # evict unused guesses and count their wasted tool time
     s = rt.summary()
@@ -148,9 +152,14 @@ def run_one(task, mode, think_s, brain="scripted"):
     executed_side_effects = sum(SIDE_EFFECT_EXECUTIONS.values())
     n_guess, name_hits, exact_hits = guess_accuracy(rt.events)
     spec_s = [c["spec_s"] for c in getattr(rt.speculator, "calls", [])]
+    # time the agent spent waiting out HTTP 429/5xx retries is not agent or tool time: subtract it
+    agent_backoff = getattr(getattr(agent, "llm", None), "backoff_s", 0.0)
+    spec_backoff = getattr(getattr(rt.speculator, "llm", None), "backoff_s", 0.0)
     row = {
         "task": task.id, "group": task.group, "split": task.split, "brain": brain, "mode": mode,
-        "seconds": round(secs, 3), "agent_calls": len(history),
+        "seconds": round(secs - agent_backoff, 3), "seconds_raw": round(secs, 3),
+        "agent_backoff_s": round(agent_backoff, 2), "spec_backoff_s": round(spec_backoff, 2),
+        "agent_calls": len(history),
         "correct": bool(task.check(answer or "")) and (task.expect is None or bool(task.expect(mock_tools.WORLD))),
         "answer": answer,
         "launched": s["speculative_calls"], "hits": s["hits"], "wasted": s["wasted"],
