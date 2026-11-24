@@ -72,6 +72,41 @@ class OracleSpeculator:
         return Guess(a["tool"], a["args"], 1.0) if "tool" in a else None
 
 
+class CorruptedOracle:
+    """Sweep speculator (H1/H2): the oracle's guess with probability p, else a wrong one.
+    A wrong guess keeps the tool but changes its arguments, so a read still runs and wastes backend time."""
+
+    def __init__(self, plan, p, seed):
+        self.plan, self.p = plan, p
+        self.name = f"noisy{p:g}"
+        self.rng = random.Random(seed)
+
+    def predict(self, task, history):
+        a = self.plan(history)
+        if "tool" not in a:
+            return None
+        if self.rng.random() < self.p:
+            return Guess(a["tool"], a["args"], 1.0)
+        args = dict(a["args"])
+        k = next((k for k, v in args.items() if isinstance(v, str)), None)
+        if k is None:
+            return None
+        args[k] = args[k] + "-wrong"
+        return Guess(a["tool"], args, 1.0)
+
+
+class DelayedSpeculator:
+    """Adds a fixed guessing latency s to another speculator (sweeps the speculator-latency axis)."""
+
+    def __init__(self, inner, delay_s):
+        self.inner, self.delay_s = inner, delay_s
+        self.name = inner.name
+
+    def predict(self, task, history):
+        time.sleep(self.delay_s)
+        return self.inner.predict(task, history)
+
+
 # Count how many times each side-effect tool actually executes (to prove none run early).
 SIDE_EFFECT_EXECUTIONS = defaultdict(int)
 
@@ -87,7 +122,9 @@ def _instrument_side_effects():
             t.fn = counted
 
 
-def make_speculator(name, task):
+def make_speculator(name, task, seed=0):
+    if name.startswith("noisy"):   # noisy0.75 = oracle that is right 75% of the time
+        return CorruptedOracle(task.plan, float(name[5:]), f"{task.id}|{name}|{seed}")
     if name == "baseline":
         return None
     if name == "rules":
@@ -123,12 +160,14 @@ def guess_accuracy(events):
     return len(guesses), name, exact
 
 
-def make_runtime(mode, task):
+def make_runtime(mode, task, spec_delay=0.0, seed=0):
     """Mode = speculator[+flag...]. Flags: prep (reversible prepare/rollback for writes),
     subs (substring provenance check), prov (substring + URL allowlist). Examples:
     baseline | rules | rules+prov | rules+prep | rules+prep+prov | oracle"""
     parts = mode.split("+")
-    spec = make_speculator(parts[0], task)
+    spec = make_speculator(parts[0], task, seed)
+    if spec is not None and spec_delay:
+        spec = DelayedSpeculator(spec, spec_delay)
     kw = {"allow_prepare": "prep" in parts}
     if "prov" in parts:
         kw["provenance"] = "allowlist"
@@ -137,12 +176,12 @@ def make_runtime(mode, task):
     return Runtime(TOOLS, speculator=spec, **kw)
 
 
-def run_one(task, mode, think_s, brain="scripted"):
-    if brain != "scripted" and mode.startswith("oracle"):
+def run_one(task, mode, think_s, brain="scripted", spec_delay=0.0, seed=0):
+    if brain != "scripted" and mode.startswith(("oracle", "noisy")):
         raise ValueError("oracle needs the scripted brain (a real agent has no plan to read)")
     SIDE_EFFECT_EXECUTIONS.clear()
     mock_tools.reset_world()
-    rt = make_runtime(mode, task)
+    rt = make_runtime(mode, task, spec_delay, seed)
     agent = make_brain(brain, task, think_s)
     answer, secs, history = run_agent(task.prompt, agent, rt, verbose=False)
     rt.pool.shutdown(wait=True)  # let in-flight speculation finish so counts are complete
