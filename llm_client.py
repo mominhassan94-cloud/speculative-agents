@@ -16,8 +16,8 @@ from dotenv import load_dotenv
 load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env"))
 
 # Agent: a bigger, slower model. Guesser: the smallest, fastest one, so it can finish while the agent thinks.
-# (Pro models have zero quota on the free tier; set GEMINI_MODEL to one if billing is enabled.)
-DEFAULT_MODEL = "gemini-3.5-flash"
+# (Pro needs billing enabled: the free tier gives it zero quota.)
+DEFAULT_MODEL = "gemini-pro-latest"
 DEFAULT_SPEC_MODEL = "gemini-3.1-flash-lite"
 RETRY_CODES = {429, 500, 503}   # 429 = free-tier rate limit; 500/503 = transient server errors
 
@@ -61,13 +61,20 @@ class LLMClient:
         self.max_attempts = max_attempts
         self.retries = 0          # this client's own retry count and backoff time (RETRIES is global)
         self.backoff_s = 0.0
+        self.in_tokens = 0        # billed tokens: prompt in, and response + thinking out
+        self.out_tokens = 0
 
     def _generate(self, contents, config):
         from google.genai import errors
         delay = 2.0
         for attempt in range(1, self.max_attempts + 1):
             try:
-                return self.client.models.generate_content(model=self.model, contents=contents, config=config)
+                r = self.client.models.generate_content(model=self.model, contents=contents, config=config)
+                u = getattr(r, "usage_metadata", None)
+                if u is not None:
+                    self.in_tokens += u.prompt_token_count or 0
+                    self.out_tokens += (u.candidates_token_count or 0) + (u.thoughts_token_count or 0)
+                return r
             except errors.APIError as e:
                 if e.code == 429 and "PerDay" in str(e):
                     raise DailyQuotaExceeded(f"{self.model}: daily request quota used up") from e
