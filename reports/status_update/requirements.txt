@@ -1,0 +1,4 @@
+# Only needed to rebuild the status-update figures/PDF, not to run the agent
+matplotlib
+reportlab
+pypdf

@@ -1,0 +1,313 @@
+{
+  "task": "Find the nonstop flights from Houston (IAH) to Denver (DEN) on 2026-11-06 and compare their total cost including checked-bag fees.",
+  "agent": "gemini-3.5-flash-lite",
+  "speculator": "llm",
+  "speculator_model": "gemini-3.5-flash-lite",
+  "speculator_system_prompt": "You predict the NEXT tool call an AI agent will make, so it can be started early.\n\nYou are given the user's task, the tools available, and the calls made so far with their results.\nPredict the single most likely next tool call, with exact arguments copied from the data above\n(do not invent values). If the agent is probably finished, or you cannot predict exact arguments,\nreturn null for tool.\n\nReply with ONLY JSON, no other text:\n{\"tool\": \"<tool name or null>\", \"args\": {...}, \"confidence\": <0.0-1.0>}",
+  "baseline": {
+    "total_s": 10.69,
+    "answer": "Here are the nonstop flights from Houston (IAH) to Denver (DEN) on November 6, 2026, along with a comparison of their base prices, checked-bag fees, and total costs:\n\n1. **Frontier (Flight F9133)**\n   * Base Price: $142\n   * Checked Bag Fee: $65\n   * **Total Cost (1 Checked Bag):** **$207**\n\n2. **United (Flight UA482)**\n   * Base Price: $189\n   * Checked Bag Fee: $40\n   * **Total Cost (1 Checked Bag):** **$229**\n\n3. **Southwest (Flight WN219)**\n   * Base Price: $204\n   * Checked Bag Fee: $0 (First 2 checked bags are free)\n   * **Total Cost (1 Checked Bag):** **$204**\n\n*(Note: American Airlines flight AA907 was excluded as it is a connecting flight, not nonstop).*",
+    "calls": [
+      [
+        "search_flights",
+        {
+          "origin": "IAH",
+          "dest": "DEN",
+          "date": "2026-11-06"
+        }
+      ],
+      [
+        "get_fare_details",
+        {
+          "flight_id": "UA482"
+        }
+      ],
+      [
+        "get_fare_details",
+        {
+          "flight_id": "WN219"
+        }
+      ],
+      [
+        "get_fare_details",
+        {
+          "flight_id": "F9133"
+        }
+      ]
+    ],
+    "model_turns": [
+      {
+        "finish_reason": "FinishReason.STOP",
+        "parts": [
+          {
+            "function_call": {
+              "name": "search_flights",
+              "args": {
+                "origin": "IAH",
+                "dest": "DEN",
+                "date": "2026-11-06"
+              }
+            },
+            "has_thought_signature": true
+          }
+        ],
+        "llm_s": 0.6
+      },
+      {
+        "finish_reason": "FinishReason.STOP",
+        "parts": [
+          {
+            "function_call": {
+              "name": "get_fare_details",
+              "args": {
+                "flight_id": "UA482"
+              }
+            },
+            "has_thought_signature": true
+          },
+          {
+            "function_call": {
+              "name": "get_fare_details",
+              "args": {
+                "flight_id": "WN219"
+              }
+            },
+            "has_thought_signature": false
+          },
+          {
+            "function_call": {
+              "name": "get_fare_details",
+              "args": {
+                "flight_id": "F9133"
+              }
+            },
+            "has_thought_signature": false
+          }
+        ],
+        "llm_s": 0.72
+      },
+      {
+        "finish_reason": "FinishReason.STOP",
+        "parts": [
+          {
+            "function_call": {
+              "name": "get_fare_details",
+              "args": {
+                "flight_id": "WN219"
+              }
+            },
+            "has_thought_signature": true
+          },
+          {
+            "function_call": {
+              "name": "get_fare_details",
+              "args": {
+                "flight_id": "F9133"
+              }
+            },
+            "has_thought_signature": false
+          }
+        ],
+        "llm_s": 0.82
+      },
+      {
+        "finish_reason": "FinishReason.STOP",
+        "parts": [
+          {
+            "function_call": {
+              "name": "get_fare_details",
+              "args": {
+                "flight_id": "F9133"
+              }
+            },
+            "has_thought_signature": true
+          }
+        ],
+        "llm_s": 0.83
+      },
+      {
+        "finish_reason": "FinishReason.STOP",
+        "parts": [
+          {
+            "text": "Here are the nonstop flights from Houston (IAH) to Denver (DEN) on November 6, 2026, along with a comparison of their base prices, checked-bag fees, and total costs:\n\n1. **Frontier (Flight F9133)**\n   * Base Price: $142\n   * Checked Bag Fee: $65\n   * **Total Cost (1 Checked Bag):** **$207**\n\n2. **United (Flight UA482)**\n   * Base Price: $189\n   * Checked Bag Fee: $40\n   * **Total Cost (1 Checked Bag):** **$229**\n\n3. **Southwest (Flight WN219)**\n   * Base Price: $204\n   * Checked Bag Fee: $0 (First 2 checked bags are free)\n   * **Total Cost (1 Checked Bag):** **$204**\n\n*(Note: American Airlines flight AA907 was excluded as it is a connecting flight, not nonstop).*"
+          }
+        ],
+        "llm_s": 1.2
+      }
+    ]
+  },
+  "speculative": {
+    "total_s": 10.22,
+    "answer": "Here are the nonstop flights from Houston (IAH) to Denver (DEN) on November 6, 2026, along with a comparison of their total cost including checked-bag fees (1 checked bag):\n\n1. **Frontier (Flight F9133)**\n   * Base Price: $142\n   * Checked Bag Fee: $65\n   * **Total Cost: $207**\n\n2. **United (Flight UA482)**\n   * Base Price: $189\n   * Checked Bag Fee: $40\n   * **Total Cost: $229**\n\n3. **Southwest (Flight WN219)**\n   * Base Price: $204\n   * Checked Bag Fee: $0 (2 free checked bags)\n   * **Total Cost: $204**\n\n*(Note: American Airlines Flight AA907 was also found, but it is a connecting flight, not nonstop, priced at $231).*",
+    "calls": [
+      [
+        "search_flights",
+        {
+          "dest": "DEN",
+          "origin": "IAH",
+          "date": "2026-11-06"
+        }
+      ],
+      [
+        "get_fare_details",
+        {
+          "flight_id": "UA482"
+        }
+      ],
+      [
+        "get_fare_details",
+        {
+          "flight_id": "WN219"
+        }
+      ],
+      [
+        "get_fare_details",
+        {
+          "flight_id": "F9133"
+        }
+      ]
+    ],
+    "model_turns": [
+      {
+        "finish_reason": "FinishReason.STOP",
+        "parts": [
+          {
+            "function_call": {
+              "name": "search_flights",
+              "args": {
+                "dest": "DEN",
+                "origin": "IAH",
+                "date": "2026-11-06"
+              }
+            },
+            "has_thought_signature": true
+          }
+        ],
+        "llm_s": 0.79
+      },
+      {
+        "finish_reason": "FinishReason.STOP",
+        "parts": [
+          {
+            "function_call": {
+              "name": "get_fare_details",
+              "args": {
+                "flight_id": "UA482"
+              }
+            },
+            "has_thought_signature": true
+          },
+          {
+            "function_call": {
+              "name": "get_fare_details",
+              "args": {
+                "flight_id": "WN219"
+              }
+            },
+            "has_thought_signature": false
+          },
+          {
+            "function_call": {
+              "name": "get_fare_details",
+              "args": {
+                "flight_id": "F9133"
+              }
+            },
+            "has_thought_signature": false
+          }
+        ],
+        "llm_s": 0.8
+      },
+      {
+        "finish_reason": "FinishReason.STOP",
+        "parts": [
+          {
+            "function_call": {
+              "name": "get_fare_details",
+              "args": {
+                "flight_id": "WN219"
+              }
+            },
+            "has_thought_signature": true
+          },
+          {
+            "function_call": {
+              "name": "get_fare_details",
+              "args": {
+                "flight_id": "F9133"
+              }
+            },
+            "has_thought_signature": false
+          }
+        ],
+        "llm_s": 0.79
+      },
+      {
+        "finish_reason": "FinishReason.STOP",
+        "parts": [
+          {
+            "function_call": {
+              "name": "get_fare_details",
+              "args": {
+                "flight_id": "F9133"
+              }
+            },
+            "has_thought_signature": true
+          }
+        ],
+        "llm_s": 0.45
+      },
+      {
+        "finish_reason": "FinishReason.STOP",
+        "parts": [
+          {
+            "text": "Here are the nonstop flights from Houston (IAH) to Denver (DEN) on November 6, 2026, along with a comparison of their total cost including checked-bag fees (1 checked bag):\n\n1. **Frontier (Flight F9133)**\n   * Base Price: $142\n   * Checked Bag Fee: $65\n   * **Total Cost: $207**\n\n2. **United (Flight UA482)**\n   * Base Price: $189\n   * Checked Bag Fee: $40\n   * **Total Cost: $229**\n\n3. **Southwest (Flight WN219)**\n   * Base Price: $204\n   * Checked Bag Fee: $0 (2 free checked bags)\n   * **Total Cost: $204**\n\n*(Note: American Airlines Flight AA907 was also found, but it is a connecting flight, not nonstop, priced at $231).*"
+          }
+        ],
+        "llm_s": 1.38
+      }
+    ],
+    "speculator_calls": [
+      {
+        "input": "TASK: Find the nonstop flights from Houston (IAH) to Denver (DEN) on 2026-11-06 and compare their total cost including checked-bag fees.\n\nTOOLS:\n- search_flights(origin, dest, date): Search nonstop and connecting flights between two airports on a date.\n- get_fare_details(flight_id): Get baggage fees and fare rules for one flight.\n- search_web(query): Search the web. Returns a list of result links.\n- open_page(url): Open a web page by URL and return its text.\n- get_weather(city, date): Get the weather forecast for a city and date.\n- lookup_airport(code): Look up an airport by IATA code.\n- get_calendar(date): Read the user's calendar for a date.\n- book_flight(flight_id): BOOK a flight (charges the user). Side effect.\n- send_email(to, body): SEND an email. Side effect.\n\nCALLS SO FAR:\n1. search_flights({\"dest\": \"DEN\", \"origin\": \"IAH\", \"date\": \"2026-11-06\"}) -> {\"flights\": [{\"flight_id\": \"UA482\", \"airline\": \"United\", \"price\": 189, \"nonstop\": true}, {\"flight_id\": \"WN219\", \"airline\": \"Southwest\", \"price\": 204, \"nonstop\": true}, {\"flight_id\": \"F9133\", \"airline\": \"Frontier\", \"price\": 142, \"nonstop\": true}, {\"flight_id\": \"AA907\", \"airline\": \"American\", \"price\": 231, \"nonstop\": false}]}\n\nPredict the next call.",
+        "raw_output": "{\"tool\": \"get_fare_details\", \"args\": {\"flight_id\": \"UA482\"}, \"confidence\": 0.9}",
+        "spec_s": 0.57
+      },
+      {
+        "input": "TASK: Find the nonstop flights from Houston (IAH) to Denver (DEN) on 2026-11-06 and compare their total cost including checked-bag fees.\n\nTOOLS:\n- search_flights(origin, dest, date): Search nonstop and connecting flights between two airports on a date.\n- get_fare_details(flight_id): Get baggage fees and fare rules for one flight.\n- search_web(query): Search the web. Returns a list of result links.\n- open_page(url): Open a web page by URL and return its text.\n- get_weather(city, date): Get the weather forecast for a city and date.\n- lookup_airport(code): Look up an airport by IATA code.\n- get_calendar(date): Read the user's calendar for a date.\n- book_flight(flight_id): BOOK a flight (charges the user). Side effect.\n- send_email(to, body): SEND an email. Side effect.\n\nCALLS SO FAR:\n1. search_flights({\"dest\": \"DEN\", \"origin\": \"IAH\", \"date\": \"2026-11-06\"}) -> {\"flights\": [{\"flight_id\": \"UA482\", \"airline\": \"United\", \"price\": 189, \"nonstop\": true}, {\"flight_id\": \"WN219\", \"airline\": \"Southwest\", \"price\": 204, \"nonstop\": true}, {\"flight_id\": \"F9133\", \"airline\": \"Frontier\", \"price\": 142, \"nonstop\": true}, {\"flight_id\": \"AA907\", \"airline\": \"American\", \"price\": 231, \"nonstop\": false}]}\n2. get_fare_details({\"flight_id\": \"UA482\"}) -> {\"flight_id\": \"UA482\", \"bag_fee_usd\": 40, \"carry_on_fee_usd\": 0}\n\nPredict the next call.",
+        "raw_output": "{\"tool\": \"get_fare_details\", \"args\": {\"flight_id\": \"WN219\"}, \"confidence\": 1.0}",
+        "spec_s": 0.53
+      },
+      {
+        "input": "TASK: Find the nonstop flights from Houston (IAH) to Denver (DEN) on 2026-11-06 and compare their total cost including checked-bag fees.\n\nTOOLS:\n- search_flights(origin, dest, date): Search nonstop and connecting flights between two airports on a date.\n- get_fare_details(flight_id): Get baggage fees and fare rules for one flight.\n- search_web(query): Search the web. Returns a list of result links.\n- open_page(url): Open a web page by URL and return its text.\n- get_weather(city, date): Get the weather forecast for a city and date.\n- lookup_airport(code): Look up an airport by IATA code.\n- get_calendar(date): Read the user's calendar for a date.\n- book_flight(flight_id): BOOK a flight (charges the user). Side effect.\n- send_email(to, body): SEND an email. Side effect.\n\nCALLS SO FAR:\n1. search_flights({\"dest\": \"DEN\", \"origin\": \"IAH\", \"date\": \"2026-11-06\"}) -> {\"flights\": [{\"flight_id\": \"UA482\", \"airline\": \"United\", \"price\": 189, \"nonstop\": true}, {\"flight_id\": \"WN219\", \"airline\": \"Southwest\", \"price\": 204, \"nonstop\": true}, {\"flight_id\": \"F9133\", \"airline\": \"Frontier\", \"price\": 142, \"nonstop\": true}, {\"flight_id\": \"AA907\", \"airline\": \"American\", \"price\": 231, \"nonstop\": false}]}\n2. get_fare_details({\"flight_id\": \"UA482\"}) -> {\"flight_id\": \"UA482\", \"bag_fee_usd\": 40, \"carry_on_fee_usd\": 0}\n3. get_fare_details({\"flight_id\": \"WN219\"}) -> {\"flight_id\": \"WN219\", \"bag_fee_usd\": 0, \"carry_on_fee_usd\": 0}\n\nPredict the next call.",
+        "raw_output": "{\"tool\": \"get_fare_details\", \"args\": {\"flight_id\": \"F9133\"}, \"confidence\": 1.0}",
+        "spec_s": 0.65
+      },
+      {
+        "input": "TASK: Find the nonstop flights from Houston (IAH) to Denver (DEN) on 2026-11-06 and compare their total cost including checked-bag fees.\n\nTOOLS:\n- search_flights(origin, dest, date): Search nonstop and connecting flights between two airports on a date.\n- get_fare_details(flight_id): Get baggage fees and fare rules for one flight.\n- search_web(query): Search the web. Returns a list of result links.\n- open_page(url): Open a web page by URL and return its text.\n- get_weather(city, date): Get the weather forecast for a city and date.\n- lookup_airport(code): Look up an airport by IATA code.\n- get_calendar(date): Read the user's calendar for a date.\n- book_flight(flight_id): BOOK a flight (charges the user). Side effect.\n- send_email(to, body): SEND an email. Side effect.\n\nCALLS SO FAR:\n1. search_flights({\"dest\": \"DEN\", \"origin\": \"IAH\", \"date\": \"2026-11-06\"}) -> {\"flights\": [{\"flight_id\": \"UA482\", \"airline\": \"United\", \"price\": 189, \"nonstop\": true}, {\"flight_id\": \"WN219\", \"airline\": \"Southwest\", \"price\": 204, \"nonstop\": true}, {\"flight_id\": \"F9133\", \"airline\": \"Frontier\", \"price\": 142, \"nonstop\": true}, {\"flight_id\": \"AA907\", \"airline\": \"American\", \"price\": 231, \"nonstop\": false}]}\n2. get_fare_details({\"flight_id\": \"UA482\"}) -> {\"flight_id\": \"UA482\", \"bag_fee_usd\": 40, \"carry_on_fee_usd\": 0}\n3. get_fare_details({\"flight_id\": \"WN219\"}) -> {\"flight_id\": \"WN219\", \"bag_fee_usd\": 0, \"carry_on_fee_usd\": 0}\n4. get_fare_details({\"flight_id\": \"F9133\"}) -> {\"flight_id\": \"F9133\", \"bag_fee_usd\": 65, \"carry_on_fee_usd\": 55}\n\nPredict the next call.",
+        "raw_output": "{\"tool\": \"get_fare_details\", \"args\": {\"flight_id\": \"AA907\"}, \"confidence\": 0.8}",
+        "spec_s": 0.57
+      }
+    ],
+    "speculation_log": [
+      "[  3.4s] launched guess get_fare_details(UA482) conf 0.90",
+      "[  4.9s] guessed get_fare_details(UA482): correct, saved 0.2 s",
+      "[  5.4s] launched guess get_fare_details(WN219) conf 1.00",
+      "[  6.9s] guessed get_fare_details(WN219): correct, saved 0.3 s",
+      "[  7.5s] too late (agent already moved on): get_fare_details(F9133)",
+      "[  9.4s] launched guess get_fare_details(AA907) conf 0.80"
+    ],
+    "summary": {
+      "speculative_calls": 3,
+      "hits": 2,
+      "misses": 0,
+      "wasted": 1,
+      "too_late": 1,
+      "est_seconds_saved": 0.5
+    }
+  },
+  "rate_limit_retries": {
+    "count": 0,
+    "backoff_s": 0.0
+  }
+}

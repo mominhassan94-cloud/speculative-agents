@@ -1,0 +1,293 @@
+{
+  "task": "Find the nonstop flights from Houston (IAH) to Denver (DEN) on 2026-11-06 and compare their total cost including checked-bag fees.",
+  "agent": "gemini-3.5-flash-lite",
+  "speculator": "rules",
+  "speculator_model": null,
+  "speculator_system_prompt": null,
+  "baseline": {
+    "total_s": 10.46,
+    "answer": "Here are the nonstop flights from Houston (IAH) to Denver (DEN) on November 6, 2026, along with a comparison of their base prices, checked-bag fees, and total costs:\n\n1. **Frontier (Flight F9133)**\n   * Base Price: $142\n   * Checked-Bag Fee: $65\n   * **Total Cost:** **$207**\n\n2. **United (Flight UA482)**\n   * Base Price: $189\n   * Checked-Bag Fee: $40\n   * **Total Cost:** **$229**\n\n3. **Southwest (Flight WN219)**\n   * Base Price: $204\n   * Checked-Bag Fee: $0 (2 free checked bags)\n   * **Total Cost:** **$204**\n\n*(Note: American Airlines flight AA907 is also listed for that date at $231, but it is a connecting flight, not nonstop.)*",
+    "calls": [
+      [
+        "search_flights",
+        {
+          "dest": "DEN",
+          "date": "2026-11-06",
+          "origin": "IAH"
+        }
+      ],
+      [
+        "get_fare_details",
+        {
+          "flight_id": "UA482"
+        }
+      ],
+      [
+        "get_fare_details",
+        {
+          "flight_id": "WN219"
+        }
+      ],
+      [
+        "get_fare_details",
+        {
+          "flight_id": "F9133"
+        }
+      ]
+    ],
+    "model_turns": [
+      {
+        "finish_reason": "FinishReason.STOP",
+        "parts": [
+          {
+            "function_call": {
+              "name": "search_flights",
+              "args": {
+                "dest": "DEN",
+                "date": "2026-11-06",
+                "origin": "IAH"
+              }
+            },
+            "has_thought_signature": true
+          }
+        ],
+        "llm_s": 0.62
+      },
+      {
+        "finish_reason": "FinishReason.STOP",
+        "parts": [
+          {
+            "function_call": {
+              "name": "get_fare_details",
+              "args": {
+                "flight_id": "UA482"
+              }
+            },
+            "has_thought_signature": true
+          },
+          {
+            "function_call": {
+              "name": "get_fare_details",
+              "args": {
+                "flight_id": "WN219"
+              }
+            },
+            "has_thought_signature": false
+          },
+          {
+            "function_call": {
+              "name": "get_fare_details",
+              "args": {
+                "flight_id": "F9133"
+              }
+            },
+            "has_thought_signature": false
+          }
+        ],
+        "llm_s": 0.86
+      },
+      {
+        "finish_reason": "FinishReason.STOP",
+        "parts": [
+          {
+            "function_call": {
+              "name": "get_fare_details",
+              "args": {
+                "flight_id": "WN219"
+              }
+            },
+            "has_thought_signature": true
+          },
+          {
+            "function_call": {
+              "name": "get_fare_details",
+              "args": {
+                "flight_id": "F9133"
+              }
+            },
+            "has_thought_signature": false
+          }
+        ],
+        "llm_s": 0.79
+      },
+      {
+        "finish_reason": "FinishReason.STOP",
+        "parts": [
+          {
+            "function_call": {
+              "name": "get_fare_details",
+              "args": {
+                "flight_id": "F9133"
+              }
+            },
+            "has_thought_signature": true
+          }
+        ],
+        "llm_s": 0.53
+      },
+      {
+        "finish_reason": "FinishReason.STOP",
+        "parts": [
+          {
+            "text": "Here are the nonstop flights from Houston (IAH) to Denver (DEN) on November 6, 2026, along with a comparison of their base prices, checked-bag fees, and total costs:\n\n1. **Frontier (Flight F9133)**\n   * Base Price: $142\n   * Checked-Bag Fee: $65\n   * **Total Cost:** **$207**\n\n2. **United (Flight UA482)**\n   * Base Price: $189\n   * Checked-Bag Fee: $40\n   * **Total Cost:** **$229**\n\n3. **Southwest (Flight WN219)**\n   * Base Price: $204\n   * Checked-Bag Fee: $0 (2 free checked bags)\n   * **Total Cost:** **$204**\n\n*(Note: American Airlines flight AA907 is also listed for that date at $231, but it is a connecting flight, not nonstop.)*"
+          }
+        ],
+        "llm_s": 1.16
+      }
+    ]
+  },
+  "speculative": {
+    "total_s": 8.11,
+    "answer": "Here are the nonstop flights from Houston (IAH) to Denver (DEN) on November 6, 2026, along with a comparison of their base prices, checked-bag fees, and total costs:\n\n1. **Frontier (Flight F9133)**\n   * Base Price: $142\n   * Checked Bag Fee: $65\n   * **Total Cost:** **$207**\n\n2. **United (Flight UA482)**\n   * Base Price: $189\n   * Checked Bag Fee: $40\n   * **Total Cost:** **$229**\n\n3. **Southwest (Flight WN219)**\n   * Base Price: $204\n   * Checked Bag Fee: $0 (2 free checked bags included)\n   * **Total Cost:** **$204**\n\n*(Note: American Airlines Flight AA907 was also found, but it is a connecting flight, not nonstop, priced at $231).*",
+    "calls": [
+      [
+        "search_flights",
+        {
+          "date": "2026-11-06",
+          "dest": "DEN",
+          "origin": "IAH"
+        }
+      ],
+      [
+        "get_fare_details",
+        {
+          "flight_id": "UA482"
+        }
+      ],
+      [
+        "get_fare_details",
+        {
+          "flight_id": "WN219"
+        }
+      ],
+      [
+        "get_fare_details",
+        {
+          "flight_id": "F9133"
+        }
+      ]
+    ],
+    "model_turns": [
+      {
+        "finish_reason": "FinishReason.STOP",
+        "parts": [
+          {
+            "function_call": {
+              "name": "search_flights",
+              "args": {
+                "date": "2026-11-06",
+                "dest": "DEN",
+                "origin": "IAH"
+              }
+            },
+            "has_thought_signature": true
+          }
+        ],
+        "llm_s": 0.57
+      },
+      {
+        "finish_reason": "FinishReason.STOP",
+        "parts": [
+          {
+            "function_call": {
+              "name": "get_fare_details",
+              "args": {
+                "flight_id": "UA482"
+              }
+            },
+            "has_thought_signature": true
+          },
+          {
+            "function_call": {
+              "name": "get_fare_details",
+              "args": {
+                "flight_id": "WN219"
+              }
+            },
+            "has_thought_signature": false
+          },
+          {
+            "function_call": {
+              "name": "get_fare_details",
+              "args": {
+                "flight_id": "F9133"
+              }
+            },
+            "has_thought_signature": false
+          }
+        ],
+        "llm_s": 0.81
+      },
+      {
+        "finish_reason": "FinishReason.STOP",
+        "parts": [
+          {
+            "function_call": {
+              "name": "get_fare_details",
+              "args": {
+                "flight_id": "WN219"
+              }
+            },
+            "has_thought_signature": true
+          },
+          {
+            "function_call": {
+              "name": "get_fare_details",
+              "args": {
+                "flight_id": "F9133"
+              }
+            },
+            "has_thought_signature": false
+          }
+        ],
+        "llm_s": 0.62
+      },
+      {
+        "finish_reason": "FinishReason.STOP",
+        "parts": [
+          {
+            "function_call": {
+              "name": "get_fare_details",
+              "args": {
+                "flight_id": "F9133"
+              }
+            },
+            "has_thought_signature": true
+          }
+        ],
+        "llm_s": 0.52
+      },
+      {
+        "finish_reason": "FinishReason.STOP",
+        "parts": [
+          {
+            "text": "Here are the nonstop flights from Houston (IAH) to Denver (DEN) on November 6, 2026, along with a comparison of their base prices, checked-bag fees, and total costs:\n\n1. **Frontier (Flight F9133)**\n   * Base Price: $142\n   * Checked Bag Fee: $65\n   * **Total Cost:** **$207**\n\n2. **United (Flight UA482)**\n   * Base Price: $189\n   * Checked Bag Fee: $40\n   * **Total Cost:** **$229**\n\n3. **Southwest (Flight WN219)**\n   * Base Price: $204\n   * Checked Bag Fee: $0 (2 free checked bags included)\n   * **Total Cost:** **$204**\n\n*(Note: American Airlines Flight AA907 was also found, but it is a connecting flight, not nonstop, priced at $231).*"
+          }
+        ],
+        "llm_s": 1.02
+      }
+    ],
+    "speculator_calls": null,
+    "speculation_log": [
+      "[  2.6s] launched guess get_fare_details(UA482) conf 0.80",
+      "[  4.1s] guessed get_fare_details(UA482): correct, saved 0.8 s",
+      "[  4.1s] launched guess get_fare_details(WN219) conf 0.70",
+      "[  5.6s] guessed get_fare_details(WN219): correct, saved 0.6 s",
+      "[  5.6s] launched guess get_fare_details(F9133) conf 0.70",
+      "[  7.1s] guessed get_fare_details(F9133): correct, saved 0.5 s",
+      "[  7.1s] no guess (speculator returned null)"
+    ],
+    "summary": {
+      "speculative_calls": 3,
+      "hits": 3,
+      "misses": 0,
+      "wasted": 0,
+      "too_late": 0,
+      "est_seconds_saved": 1.95
+    }
+  },
+  "rate_limit_retries": {
+    "count": 0,
+    "backoff_s": 0.0
+  }
+}

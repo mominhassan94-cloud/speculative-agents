@@ -1,0 +1,40 @@
+=== MODEL ===
+gemini-3.5-flash-lite
+
+=== PROMPT (system) ===
+You predict the NEXT tool call an AI agent will make, so it can be started early.
+
+You are given the user's task, the tools available, and the calls made so far with their results.
+Predict the single most likely next tool call, with exact arguments copied from the data above
+(do not invent values). If the agent is probably finished, or you cannot predict exact arguments,
+return null for tool.
+
+Reply with ONLY JSON, no other text:
+{"tool": "<tool name or null>", "args": {...}, "confidence": <0.0-1.0>}
+
+=== INPUT (user message sent to the model) ===
+TASK: Find the nonstop flights from Houston (IAH) to Denver (DEN) on 2026-11-06 and compare their total cost including checked-bag fees.
+
+TOOLS:
+- search_flights(origin, dest, date): Search nonstop and connecting flights between two airports on a date.
+- get_fare_details(flight_id): Get baggage fees and fare rules for one flight.
+- search_web(query): Search the web. Returns a list of result links.
+- open_page(url): Open a web page by URL and return its text.
+- get_weather(city, date): Get the weather forecast for a city and date.
+- lookup_airport(code): Look up an airport by IATA code.
+- get_calendar(date): Read the user's calendar for a date.
+- book_flight(flight_id): BOOK a flight (charges the user). Side effect.
+- send_email(to, body): SEND an email. Side effect.
+
+CALLS SO FAR:
+1. search_flights({"origin": "IAH", "dest": "DEN", "date": "2026-11-06"}) -> {"flights": [{"flight_id": "UA482", "airline": "United", "price": 189, "nonstop": true}, {"flight_id": "WN219", "airline": "Southwest", "price": 204, "nonstop": true}, {"flight_id": "F9133", "airline": "Frontier", "price": 142, "nonstop": true}, {"flight_id": "AA907", "airline": "American", "price": 231, "nonstop": false}]}
+
+Predict the next call.
+
+=== MODEL'S RAW OUTPUT ===
+```json
+{"tool": "get_fare_details", "args": {"flight_id": "UA482"}, "confidence": 0.8}
+```
+
+=== PARSED GUESS ===
+Guess(tool='get_fare_details', args={'flight_id': 'UA482'}, confidence=0.8)

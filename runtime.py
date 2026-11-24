@@ -37,35 +37,49 @@ class Runtime:
         self.speculator = speculator
         self.min_conf = min_conf
         self.pool = ThreadPoolExecutor(max_workers=8)
-        self.pending = {}          # key -> (future, started_at)
+        self.pending = {}          # key -> (future, started_at, kind, run_tool, run_args)
+        self.discarded = []        # (key, entry) for guesses dropped on a miss; settled in close()
         self.lock = threading.Lock()
         self.log = []              # human-readable speculation log
         self.events = []           # structured per-call event log (for JSONL / analysis)
         self.launched = 0
         self.hits = 0
+        self.misses = 0
+        self.too_late = 0
         self.saved_s = 0.0
+        self.step = 0              # number of real tool calls made so far
         self.speculator_calls = 0
         self.wasted_tool_s = 0.0   # tool-seconds spent on guesses that were never used
-        self.t0 = time.time()
+        self.t0 = time.perf_counter()
+
+    def _now(self):
+        return time.perf_counter() - self.t0
+
+    def _note(self, msg):
+        self.log.append(f"[{self._now():5.1f}s] {msg}")
 
     def _event(self, etype, tool, args, **extra):
-        self.events.append({"t": round(time.time() - self.t0, 4), "kind": etype,
+        self.events.append({"t": round(self._now(), 4), "kind": etype,
                             "tool": tool, "args": args, **extra})
 
     # --- called right after each real observation comes back -----------------
     def observe(self, task, history):
         if self.speculator is None:
             return
-        self.pool.submit(self._speculate, task, list(history))
+        self.pool.submit(self._speculate, task, list(history), self.step)
 
-    def _speculate(self, task, history):
+    def _speculate(self, task, history, step):
         self.speculator_calls += 1
         try:
             g = self.speculator.predict(task, history)
         except Exception as e:  # a bad guess must never break the agent
-            self.log.append(f"speculator error: {type(e).__name__}")
+            self._note(f"speculator error: {type(e).__name__}: {e}")
             return
-        if g is None or g.tool not in self.tools:
+        if g is None:
+            self._note("no guess (speculator returned null)")
+            return
+        if g.tool not in self.tools:
+            self._note(f"no guess (unknown tool {g.tool!r})")
             return
         t = self.tools[g.tool]
         run_tool, run_args, kind = t, g.args, "read"
@@ -77,27 +91,33 @@ class Runtime:
             elif self.allow_prepare and t.reversible:
                 kind = "reversible"
             else:
-                self.log.append(f"BLOCKED (side-effect tool, never speculated): {g.tool}")
+                self._note(f"BLOCKED (side-effect tool, never speculated): {g.tool}")
                 self._event("blocked", g.tool, g.args, conf=g.confidence)
                 return
         if g.confidence < self.min_conf:
-            self.log.append(f"held back (confidence {g.confidence:.2f}): {g.tool}")
+            self._note(f"held back (confidence {g.confidence:.2f}): {g.tool}({_short(g.args)})")
             self._event("held_back", g.tool, g.args, conf=g.confidence)
             return
         if not self._provenance_ok(task, history, g.args):
             self.refused += 1
-            self.log.append(f"REFUSED (provenance={self.provenance}): {g.tool}({_short(g.args)})")
+            self._note(f"REFUSED (provenance={self.provenance}): {g.tool}({_short(g.args)})")
             self._event("refused", g.tool, g.args, conf=g.confidence)
             return
         key = _key(g.tool, g.args)
         with self.lock:
+            if self.step != step:  # the agent already made its next call; this guess is stale
+                self.too_late += 1
+                self._note(f"too late (agent already moved on): {g.tool}({_short(g.args)})")
+                self._event("too_late", g.tool, g.args, conf=g.confidence)
+                return
             if key in self.pending:
                 return
-            self.pending[key] = (self.pool.submit(self._timed, run_tool, run_args), time.time(),
+            self.pending[key] = (self.pool.submit(self._timed, run_tool, run_args), time.perf_counter(),
                                  kind, run_tool, run_args)
             self.launched += 1
             if kind != "read":
                 self.prepared += 1
+            self._note(f"launched guess {g.tool}({_short(g.args)}) conf {g.confidence:.2f} [{kind}]")
             self._event("spec_launch", g.tool, g.args, conf=g.confidence, spec=kind)
 
     def _provenance_ok(self, task, history, args):
@@ -117,20 +137,27 @@ class Runtime:
 
     @staticmethod
     def _timed(t, args):
-        s = time.time()
+        s = time.perf_counter()
         res = t.fn(**args)
-        return res, time.time() - s
+        return res, time.perf_counter() - s
 
     # --- called when the agent makes its real call ----------------------------
     def call(self, tool, args):
         key = _key(tool, args)
         with self.lock:
+            self.step += 1
             entry = self.pending.pop(key, None)
+            stale = list(self.pending.items())
+            self.pending.clear()
+            self.discarded.extend(stale)   # wasted time and rollback are settled in close()
+        for k, _ in stale:  # guesses that did not match this real call are discarded
+            self.misses += 1
+            self._note(f"guessed {k.replace('|', ' ')}: WRONG (real call {tool}({_short(args)})), discarded")
         if entry:
             fut, _, kind, _, _ = entry
-            w = time.time()
+            w = time.perf_counter()
             res, tool_time = fut.result()
-            waited = time.time() - w
+            waited = time.perf_counter() - w
             saved = max(0.0, tool_time - waited)
             if kind == "prepare":
                 # the early step was only the dry-run; now do the real (fast) commit
@@ -139,7 +166,7 @@ class Runtime:
                 self.prepare_hits += 1
             self.hits += 1
             self.saved_s += saved
-            self.log.append(f"guessed {tool}({_short(args)}): correct, saved {saved:.1f} s")
+            self._note(f"guessed {tool}({_short(args)}): correct, saved {saved:.1f} s")
             self._event("real_call", tool, args, hit=True, saved_s=round(saved, 4))
             return res
         res, _ = self._timed(self.tools[tool], args)
@@ -149,7 +176,8 @@ class Runtime:
     def close(self):
         """End of run: evict guesses nobody consumed and account for their wasted tool time."""
         with self.lock:
-            leftovers = list(self.pending.items())
+            leftovers = self.discarded + list(self.pending.items())
+            self.discarded = []
             self.pending.clear()
         for key, (fut, _, kind, run_tool, run_args) in leftovers:
             try:
@@ -164,8 +192,8 @@ class Runtime:
 
     def summary(self):
         wasted = self.launched - self.hits
-        return {"speculative_calls": self.launched, "hits": self.hits,
-                "wasted": wasted, "est_seconds_saved": round(self.saved_s, 2),
+        return {"speculative_calls": self.launched, "hits": self.hits, "misses": self.misses,
+                "wasted": wasted, "too_late": self.too_late, "est_seconds_saved": round(self.saved_s, 2),
                 "wasted_tool_s": round(self.wasted_tool_s, 3),
                 "speculator_calls": self.speculator_calls,
                 "prepared": self.prepared, "prepare_hits": self.prepare_hits,

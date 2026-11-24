@@ -10,7 +10,7 @@ Everything marked *(inferred)* is my reading of the repo and the research report
 **Built and working (on `add-workspace-folder`):**
 - Mock tools with latency, read-only / side-effect flags, reversible "prepare" variants (`mock_tools.py`)
 - Scripted agent brain + real-LLM brain (`agent.py`)
-- Rule, LLM (Claude) and Gemini speculators (`speculator.py`)
+- Rule and Gemini (LLM) speculators (`speculator.py`); Gemini agent brain (`agent.py`, `llm_client.py`). Gemini is the only LLM provider.
 - Runtime: cache, safety gate, confidence threshold, provenance check, prepare/rollback, event log, wasted tool-seconds (`runtime.py`)
 - Eval harness: 20 reps default, shuffled mode order, paired speedup with bootstrap CI (`run_eval.py`)
 - Research report with 10 falsifiable hypotheses, H1 to H10 (`workspace/research_report.md`)
@@ -22,7 +22,7 @@ Everything marked *(inferred)* is my reading of the repo and the research report
 4. **No sweeps.** Savings are capped by think time (`--think`) and tool latency (`--scale`). Any single percentage without a sweep is an artifact of one constant.
 5. **Stale-hit hazard is still open** *(inferred from `runtime.py`)*: the cache has no TTL and is not invalidated when a write tool runs, so a read cached before `book_flight` can be served after it.
 6. **No live-LLM results.** All committed runs are offline with the scripted brain.
-7. **`khizar/gemini-migration` diverged on Nov 1** and touches `runtime.py`, `speculator.py`, `spec_demo.py`, `requirements.txt`. The longer we wait, the worse the merge.
+7. ~~`khizar/gemini-migration` diverged on Nov 1~~ Merged with `main` on Nov 23 (Gemini is the only provider).
 8. README milestones are stale (Nov 15 "end to end" is today).
 
 ---
@@ -105,7 +105,7 @@ Done when: a single plot of measured saving vs. predicted `p x min(T, D - s)`, a
 | Track | Owner | Work | Tests |
 |---|---|---|---|
 | C. Mined speculator | Momin | `NGramSpeculator`: key on (last tool, status), learn next-tool counts and argument templates (e.g. "url = first result url") from baseline-run logs on **train tasks only** | H3, H4 |
-| D. Live LLM | Khizar | Run `GeminiSpeculator` (and Claude if budget allows) on held-out tasks, 10+ reps, log name-accuracy vs exact-match accuracy, add a "copy args only from context" check, calibrate confidence | H5, H6 |
+| D. Live LLM | Khizar | Run the Gemini speculator (`LLMSpeculator`) on held-out tasks, 10+ reps, log name-accuracy vs exact-match accuracy, add a "copy args only from context" check, calibrate confidence | H5, H6 |
 | E. Threshold sweep | together, Nov 24 | Sweep confidence 0 to 1 for all speculators; build the precision / waste / speedup plot | H6 |
 
 Done when: a table of hit rate, precision, waste and speedup per speculator, on **held-out tasks only**.
@@ -128,7 +128,7 @@ Done when: every H7-H10 result is reported as pass or fail, including failures.
 ### If we fall behind (cut order)
 1. Drop self-speculation / streaming early dispatch (already a stretch goal).
 2. Drop tau-bench replay (`replay_eval.py`) and say so in the write-up.
-3. Drop Claude as a second live speculator; keep Gemini only.
+3. Drop live Gemini-agent (setup 3) runs to a small demo subset; keep the Gemini speculator runs.
 4. **Never cut:** held-out split, sweeps, the stale-cache and adversary tests. Those are the contribution.
 
 ---

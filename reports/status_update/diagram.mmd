@@ -1,0 +1,17 @@
+%% Source for diagram.png (rendered by make_diagram.py; no Mermaid renderer was available)
+flowchart TD
+  T[User task in<br/>run_agent] --> L[Agent LLM call<br/>Gemini function calling<br/>GeminiBrain.next_action]
+  L -- final text --> F[Final answer + metrics out<br/>time, hits, misses, wasted, too-late]
+  L -- tool call --> C{Runtime.call<br/>real call == pending guess?<br/>exact tool + args}
+  C -- yes --> H[HIT: reuse cached result]
+  C -- no --> M[MISS / no guess:<br/>discard guesses, run real tool]
+  H --> O[Observation appended to history<br/>Runtime.observe fires speculator]
+  M --> O
+  O -- loop --> L
+  subgraph S[Speculative path: background threads, overlaps the next Gemini call]
+    P[Speculator predicts next call<br/>RuleSpeculator or LLMSpeculator/Gemini] --> G{Safety gate<br/>read-only? conf >= 0.6?<br/>agent not moved on?}
+    G -- no --> D[Drop guess<br/>blocked / held back / too late]
+    G -- yes --> R[Run tool early<br/>thread pool -> pending cache]
+  end
+  O -- history so far --> P
+  R -. checked at next real call .-> C

@@ -1,6 +1,6 @@
 """The agent loop plus two interchangeable 'brains':
 
-  AnthropicBrain - real Claude via tool use (needs ANTHROPIC_API_KEY)
+  GeminiBrain    - real Gemini model via function calling (needs GEMINI_API_KEY)
   ScriptedBrain  - offline stand-in with a fixed plan and simulated thinking time,
                    used to test the pipeline and timing without an API key
 """
@@ -32,34 +32,38 @@ class ScriptedBrain:
         return {"final": "Nonstop options with baggage: " + "; ".join(rows)}
 
 
-class AnthropicBrain:
-    name = "claude"
+class GeminiBrain:
+    """Real Gemini model via function calling (needs GEMINI_API_KEY; model from GEMINI_MODEL)."""
+    name = "gemini"
 
-    def __init__(self, tools, model="claude-sonnet-5-5"):
-        import anthropic
-        self.client = anthropic.Anthropic()
-        self.model = model
-        self.tool_defs = [{"name": t.name, "description": t.description, "input_schema": t.input_schema}
-                          for t in tools.values()]
+    def __init__(self, tools, model=None):
+        from llm_client import LLMClient
+        self.llm = LLMClient(model)
+        self.model = self.llm.model
+        self.config = self.llm.tool_config(tools)
+        self.contents = []
+        self.raw_log = []     # one entry per model call: what the model actually returned, plus timing
 
     def next_action(self, task, history):
-        msgs = [{"role": "user", "content": task}]
-        for i, h in enumerate(history):
-            tid = f"toolu_{i}"
-            msgs.append({"role": "assistant", "content": [
-                {"type": "tool_use", "id": tid, "name": h["tool"], "input": h["args"]}]})
-            msgs.append({"role": "user", "content": [
-                {"type": "tool_result", "tool_use_id": tid, "content": json.dumps(h["result"])}]})
-        r = self.client.messages.create(model=self.model, max_tokens=1024, tools=self.tool_defs, messages=msgs)
-        for b in r.content:
-            if b.type == "tool_use":
-                return {"tool": b.name, "args": b.input}
-        return {"final": "".join(b.text for b in r.content if b.type == "text")}
+        # Build the conversation incrementally so the model's own turns (with their thought
+        # signatures) are sent back unchanged, instead of being re-serialized from `history`.
+        if not history:
+            self.contents = [self.llm.user_turn(task)]
+        else:
+            h = history[-1]
+            self.contents.append(self.llm.tool_result_turn(h["tool"], h["result"]))
+        t = time.perf_counter()
+        content, action, raw = self.llm.step(self.contents, self.config)
+        raw["llm_s"] = round(time.perf_counter() - t, 2)
+        self.raw_log.append(raw)
+        if content is not None:
+            self.contents.append(content)
+        return action
 
 
 def run_agent(task, brain, runtime, max_steps=12, verbose=True):
     history = []
-    t0 = time.time()
+    t0 = time.perf_counter()
     for _ in range(max_steps):
         action = brain.next_action(task, history)   # speculation runs during this wait
         if "final" in action:
@@ -67,6 +71,6 @@ def run_agent(task, brain, runtime, max_steps=12, verbose=True):
         result = runtime.call(action["tool"], action["args"])
         history.append({"tool": action["tool"], "args": action["args"], "result": result})
         if verbose:
-            print(f"  [{time.time() - t0:5.1f}s] {action['tool']}({json.dumps(action['args'])})")
+            print(f"  [{time.perf_counter() - t0:5.1f}s] {action['tool']}({json.dumps(action['args'])})")
         runtime.observe(task, history)              # start guessing the NEXT call immediately
-    return action.get("final"), time.time() - t0, history
+    return action.get("final"), time.perf_counter() - t0, history
