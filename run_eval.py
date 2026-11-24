@@ -349,6 +349,7 @@ def main():
     p.add_argument("--brain", default="scripted", choices=["scripted", "gemini"],
                    help="who plays the agent: the task's scripted plan, or a real Gemini model")
     p.add_argument("--out", default=None)
+    p.add_argument("--resume", action="store_true", help="append to --out, skipping (task, mode, rep) already in it")
     a = p.parse_args()
 
     mock_tools.LATENCY_SCALE = a.scale
@@ -365,7 +366,17 @@ def main():
     out = a.out or os.path.join("workspace", "results", time.strftime("eval_%Y%m%d_%H%M%S.csv"))
     os.makedirs(os.path.dirname(out) or ".", exist_ok=True)
     ev_path = os.path.splitext(out)[0] + ".events.jsonl"
-    csv_f, ev_f, writer = open(out, "w", newline=""), open(ev_path, "w"), None
+    done, writer = set(), None
+    if a.resume and os.path.exists(out):   # continue a live run cut off by a daily quota: skip finished runs
+        with open(out, newline="") as f:
+            reader = csv.DictReader(f)
+            fields = reader.fieldnames
+            done = {(r["task"], r["mode"], int(r["rep"])) for r in reader}
+        csv_f, ev_f = open(out, "a", newline=""), open(ev_path, "a")
+        writer = csv.DictWriter(csv_f, fieldnames=fields, extrasaction="ignore")
+        print(f"resuming {out}: {len(done)} runs already done")
+    else:
+        csv_f, ev_f = open(out, "w", newline=""), open(ev_path, "w")
 
     rng = random.Random(a.seed)
     rows, all_events = [], []
@@ -379,6 +390,8 @@ def main():
             if stop:
                 break
             for mode in order:
+                if (task.id, mode, rep) in done:
+                    continue
                 try:
                     r, events = run_one(task, mode, think_s, a.brain)
                 except DailyQuotaExceeded as e:  # every later run would fail too, so stop here

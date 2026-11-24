@@ -8,6 +8,7 @@ Config comes from the environment (or a .env file in the repo root, which is git
 import json
 import os
 import random
+import re
 import threading
 import time
 
@@ -77,7 +78,9 @@ class LLMClient:
                 return r
             except errors.APIError as e:
                 if e.code == 429 and "PerDay" in str(e):
-                    raise DailyQuotaExceeded(f"{self.model}: daily request quota used up") from e
+                    cap = re.search(r"quotaValue'?:\s*'?(\d+)", str(e))
+                    raise DailyQuotaExceeded(f"{self.model}: daily request quota used up"
+                                             + (f" (limit {cap.group(1)}/day)" if cap else "")) from e
                 if e.code not in RETRY_CODES or attempt == self.max_attempts:
                     raise
                 wait = delay + random.uniform(0, 1)
