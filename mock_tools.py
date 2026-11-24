@@ -50,13 +50,14 @@ class Tool:
     prepare: Optional[str] = None     # name of a reversible 'dry-run' tool that does the slow part of this tool
     undo: Optional[Callable] = None   # called as undo(**args) to roll a reversible call back
     commit_saving_s: float = 0.0      # seconds the real call saves when its prepare step already ran
+    scope: Optional[str] = None       # world resource a tool reads/writes (None = unknown, so any write may affect it)
 
 
 TOOLS: dict[str, Tool] = {}
 
 
 def tool(name, read_only, latency_s, description, props, required=None,
-         reversible=False, prepare=None, commit_saving_s=0.0):
+         reversible=False, prepare=None, commit_saving_s=0.0, scope=None):
     def deco(fn):
         def wrapped(**kwargs):
             _simulate_latency(latency_s)  # pretend this is a network call
@@ -64,7 +65,7 @@ def tool(name, read_only, latency_s, description, props, required=None,
         TOOLS[name] = Tool(
             name, wrapped, read_only, latency_s, description,
             {"type": "object", "properties": props, "required": required or list(props)},
-            reversible=reversible, prepare=prepare, commit_saving_s=commit_saving_s,
+            reversible=reversible, prepare=prepare, commit_saving_s=commit_saving_s, scope=scope,
         )
         return wrapped
     return deco
@@ -284,7 +285,7 @@ TOOLS["hold_fare"].undo = release_hold
 
 
 @tool("book_flight", False, 0.5, "BOOK a flight (charges the user). Side effect. Faster if the fare is already held.",
-      {"flight_id": _S}, prepare="hold_fare", commit_saving_s=1.5)
+      {"flight_id": _S}, prepare="hold_fare", commit_saving_s=1.5, scope="bookings")
 def book_flight(flight_id):
     with _wl:
         held = flight_id in WORLD["holds"]
@@ -296,14 +297,15 @@ def book_flight(flight_id):
     return {"status": "booked", "flight_id": flight_id}
 
 
-@tool("send_email", False, 1.5, "SEND an email. Side effect.", {"to": _S, "body": _S})
+@tool("send_email", False, 1.5, "SEND an email. Side effect.", {"to": _S, "body": _S}, scope="email")
 def send_email(to, body):
     with _wl:
         WORLD["emails"].append({"to": to, "body": body})
     return {"status": "sent", "to": to}
 
 
-@tool("book_hotel", False, 0.8, "BOOK a hotel room (charges the user). Side effect.", {"hotel_id": _S})
+@tool("book_hotel", False, 0.8, "BOOK a hotel room (charges the user). Side effect.", {"hotel_id": _S},
+      scope="bookings")
 def book_hotel(hotel_id):
     with _wl:
         WORLD["hotel_bookings"].append(hotel_id)

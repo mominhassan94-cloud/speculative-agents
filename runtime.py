@@ -8,6 +8,7 @@ The main agent never sees the guesses, so its reasoning is unchanged.
 """
 import json
 import threading
+from collections import defaultdict
 import time
 from concurrent.futures import ThreadPoolExecutor
 from urllib.parse import urlparse
@@ -21,11 +22,22 @@ def _key(tool, args):
 
 class Runtime:
     def __init__(self, tools, speculator=None, min_conf=0.6,
-                 allow_prepare=False, provenance="none", allow_hosts=("example.com",)):
+                 allow_prepare=False, provenance="none", allow_hosts=("example.com",), cache="step"):
         """allow_prepare: let a guessed side-effect call start its reversible 'prepare' variant early
                           (e.g. hold_fare for book_flight); unused preparations are rolled back.
            provenance:    'none' | 'substring' (string args must appear in prompt/earlier data) |
-                          'allowlist' (substring check AND any URL argument must be on allow_hosts)."""
+                          'allowlist' (substring check AND any URL argument must be on allow_hosts).
+           cache:         how long an unused guess may wait for a matching real call (H8, stale reads):
+                          'step'       until the next real call (default; can never serve a read across a write)
+                          'run'        until the end of the run (the pre-merge behaviour; can serve stale reads)
+                          'invalidate' until the end of the run, but a write drops cached reads it may affect
+                                       (same scope, or either scope unknown)."""
+        assert cache in ("step", "run", "invalidate"), cache
+        self.cache = cache
+        self.writes = defaultdict(int)   # scope -> real writes so far ("*" counts every write)
+        self.launch_writes = {}          # key -> snapshot of self.writes when the guess was launched
+        self.stale_served = 0            # hits whose read was launched before a write that may affect it
+        self.invalidated = 0
         self.allow_prepare = allow_prepare
         self.provenance = provenance
         self.allow_hosts = tuple(allow_hosts)
@@ -117,6 +129,7 @@ class Runtime:
                 return
             self.pending[key] = (self.pool.submit(self._timed, run_tool, run_args), time.perf_counter(),
                                  kind, run_tool, run_args)
+            self.launch_writes[key] = dict(self.writes)
             self.launched += 1
             if kind != "read":
                 self.prepared += 1
@@ -147,12 +160,28 @@ class Runtime:
     # --- called when the agent makes its real call ----------------------------
     def call(self, tool, args):
         key = _key(tool, args)
+        t = self.tools[tool]
         with self.lock:
             self.step += 1
             entry = self.pending.pop(key, None)
-            stale = list(self.pending.items())
-            self.pending.clear()
+            launched_at = self.launch_writes.pop(key, {})
+            if self.cache == "step":
+                stale = list(self.pending.items())
+            elif self.cache == "invalidate" and not t.read_only:
+                stale = [(k, e) for k, e in self.pending.items() if _may_affect(t.scope, e[3].scope)]
+                self.invalidated += len(stale)
+            else:
+                stale = []
+            for k, _ in stale:
+                del self.pending[k]
+                self.launch_writes.pop(k, None)
             self.discarded.extend(stale)   # wasted time and rollback are settled in close()
+            if not t.read_only:
+                self.writes[t.scope or "?"] += 1
+                self.writes["*"] += 1
+        if entry and entry[2] == "read" and self._written_since(launched_at, t.scope):
+            self.stale_served += 1     # this cached read predates a write that may have changed it
+            self._note(f"STALE read served: {tool}({_short(args)})")
         for k, _ in stale:  # guesses that did not match this real call are discarded
             self.misses += 1
             self._note(f"guessed {k.replace('|', ' ')}: WRONG (real call {tool}({_short(args)})), discarded")
@@ -175,6 +204,12 @@ class Runtime:
         res, _ = self._timed(self.tools[tool], args)
         self._event("real_call", tool, args, hit=False, saved_s=0.0, step=self.step)
         return res
+
+    def _written_since(self, snapshot, scope):
+        """Did a write that may affect a read of this scope happen after the snapshot was taken?"""
+        if scope is None:
+            return self.writes["*"] != snapshot.get("*", 0)
+        return any(self.writes[s] != snapshot.get(s, 0) for s in (scope, "?"))
 
     def close(self):
         """End of run: evict guesses nobody consumed and account for their wasted tool time."""
@@ -200,7 +235,13 @@ class Runtime:
                 "wasted_tool_s": round(self.wasted_tool_s, 3),
                 "speculator_calls": self.speculator_calls,
                 "prepared": self.prepared, "prepare_hits": self.prepare_hits,
-                "rollbacks": self.rollbacks, "refused": self.refused}
+                "rollbacks": self.rollbacks, "refused": self.refused,
+                "stale_served": self.stale_served, "invalidated": self.invalidated}
+
+
+def _may_affect(write_scope, read_scope):
+    """Could a write in write_scope change a read in read_scope? Unknown scopes are assumed to overlap."""
+    return write_scope is None or read_scope is None or write_scope == read_scope
 
 
 def _short(args):
