@@ -77,7 +77,10 @@ class Runtime:
             return
         if g is None:
             self._note("no guess (speculator returned null)")
+            self._event("no_guess", None, None, step=step)
             return
+        # every guess is logged before any gate, so accuracy can be scored against the next real call
+        self._event("guess", g.tool, g.args, conf=g.confidence, step=step)
         if g.tool not in self.tools:
             self._note(f"no guess (unknown tool {g.tool!r})")
             return
@@ -167,10 +170,10 @@ class Runtime:
             self.hits += 1
             self.saved_s += saved
             self._note(f"guessed {tool}({_short(args)}): correct, saved {saved:.1f} s")
-            self._event("real_call", tool, args, hit=True, saved_s=round(saved, 4))
+            self._event("real_call", tool, args, hit=True, saved_s=round(saved, 4), step=self.step)
             return res
         res, _ = self._timed(self.tools[tool], args)
-        self._event("real_call", tool, args, hit=False, saved_s=0.0)
+        self._event("real_call", tool, args, hit=False, saved_s=0.0, step=self.step)
         return res
 
     def close(self):
