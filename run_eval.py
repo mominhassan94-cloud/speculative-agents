@@ -143,6 +143,9 @@ def _instrument_side_effects():
             t.fn = counted
 
 
+_MINED = None
+
+
 def make_speculator(name, task, seed=0):
     if name.startswith("noisy"):   # noisy0.75 = oracle that is right 75% of the time
         return CorruptedOracle(task.plan, float(name[5:]), f"{task.id}|{name}|{seed}")
@@ -154,6 +157,12 @@ def make_speculator(name, task, seed=0):
         return OracleSpeculator(task.plan)
     if name == "adversary":
         return AdversarialSpeculator()
+    if name == "mined":   # fit on train-task traces only, once per process
+        global _MINED
+        if _MINED is None:
+            from mined import fit_on_train
+            _MINED = fit_on_train()
+        return _MINED
     if name == "llm":
         from speculator import LLMSpeculator
         return LLMSpeculator(TOOLS)
