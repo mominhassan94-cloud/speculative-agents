@@ -40,7 +40,8 @@ b1 = mk_brain()
 rt = Runtime(TOOLS, speculator=spec)
 ans1, t1, h1 = run_agent(a.task, b1, rt)
 print(f"  answer: {ans1}\n  total: {t1:.1f}s\n")
-time.sleep(0.5)  # let any in-flight speculation finish logging
+rt.pool.shutdown(wait=True)  # let in-flight speculation finish so counts are complete
+rt.close()                   # settle unused guesses: count wasted tool time, roll back holds
 
 calls0 = [(h["tool"], h["args"]) for h in h0]
 calls1 = [(h["tool"], h["args"]) for h in h1]
