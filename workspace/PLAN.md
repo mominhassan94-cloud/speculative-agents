@@ -5,7 +5,30 @@ Everything marked *(inferred)* is my reading of the repo and the research report
 
 ---
 
-## 0. Where we actually are
+## Status, Nov 24: now a solo project (Khizar owns every track)
+
+| Track | Status | Where |
+|---|---|---|
+| Merge Gemini branch | done, PR #2 | `khizar/gemini-migration` |
+| B. Tasks: 26 with train/held-out split | done | `khizar/tasks-heldout` |
+| A. Sweeps (H1, H2, break-even) | done: `sweep.py`, `plots.py` | `khizar/sweeps` |
+| F. Stale cache (H8) | done: hazard shown under the old cache, fixed by per-step cache or scope invalidation | `khizar/stale-cache` |
+| G. Adversary, canary, lossless (H7, H9, H10) | done: `adversary.py` | `khizar/adversary` |
+| C. Mined speculator (H3, H4) | built: `mined.py`, offline held-out comparison | `khizar/adversary` (next PR) |
+| D. Live Gemini (H5, H6) | setup 3 train run in progress (Pro agent, Flash-Lite guesser, billing on) | |
+| E. Threshold sweep (H6) | next | |
+| Charts, README results, write-up | Nov 29-30 | |
+
+**Correction to section 1.3:** a hit saves `min(D, T - s)`, not `min(T, D - s)`. The guess starts `s` after the
+result and finishes at `s + D`; the agent asks at `T`, so the call is ready at `max(T, s + D)` instead of `T + D`.
+With one backend slot, a miss costs `max(0, s + D - T)`. `sweep.py` tests this form.
+
+**Correction to gap 5:** the stale-hit hazard was real on `main` (unused guesses lived for the whole run). The
+merged runtime drops unused guesses at every real call, which closes it; `hazard.py` shows both.
+
+---
+
+## 0. Where we actually are (as of Nov 15)
 
 **Built and working (on `add-workspace-folder`):**
 - Mock tools with latency, read-only / side-effect flags, reversible "prepare" variants (`mock_tools.py`)

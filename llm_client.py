@@ -2,12 +2,13 @@
 
 Config comes from the environment (or a .env file in the repo root, which is gitignored):
   GEMINI_API_KEY     required for any real-model run
-  GEMINI_MODEL       model for the agent and the speculator (default below)
-  GEMINI_SPEC_MODEL  optional: a different model for the speculator only
+  GEMINI_MODEL       model for the agent (default below: Pro, needs billing)
+  GEMINI_SPEC_MODEL  model for the speculator/guesser (default below: Flash-Lite)
 """
 import json
 import os
 import random
+import re
 import threading
 import time
 
@@ -77,7 +78,9 @@ class LLMClient:
                 return r
             except errors.APIError as e:
                 if e.code == 429 and "PerDay" in str(e):
-                    raise DailyQuotaExceeded(f"{self.model}: daily request quota used up") from e
+                    cap = re.search(r"quotaValue'?:\s*'?(\d+)", str(e))
+                    raise DailyQuotaExceeded(f"{self.model}: daily request quota used up"
+                                             + (f" (limit {cap.group(1)}/day)" if cap else "")) from e
                 if e.code not in RETRY_CODES or attempt == self.max_attempts:
                     raise
                 wait = delay + random.uniform(0, 1)
